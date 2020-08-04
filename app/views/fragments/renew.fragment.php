@@ -188,6 +188,23 @@
 
                                 foreach ($Packages->getDataAs("Package") as $p) {
                                     $package_modules = $p->get("settings.modules");
+									// Compatibility of Reactions Pro with renewal system
+if ($package_modules && is_array($package_modules)) {
+    foreach ($package_modules as $key => $pm) {
+        if (is_object($pm)) {
+            if (isset($pm->reactions_settings)) {
+                unset($package_modules[$key]);
+            }
+        }
+    }
+    foreach ($package_modules as $key => $pm) {
+        if (is_object($pm)) {
+            if (isset($pm->reactions_settings_2)) {
+                unset($package_modules[$key]);
+            }
+        }
+    }
+}
                                     if ($package_modules &&
                                         is_array($package_modules) &&
                                         array_intersect($package_modules, $available_modules)) 
@@ -354,7 +371,9 @@
                                                                     <span class="sli sli-paper-plane"></span>
                                                                 <?php elseif($m->get("idname") == "auto-repost") : ?>
                                                                     <span class="sli sli-reload"></span>
-                                                                <?php endif ?>
+                                                                <?php elseif($m->get("idname") == "reactions") : ?>
+                                                                         <span class="mdi mdi-sticker-emoji"></span>
+                                                                 <?php endif ?>
                                                             </span>
                                                         <?php endforeach ?>
                                                     </div>
@@ -364,6 +383,77 @@
                                             <div class="feature">
                                                 <span class="<?= $p->get("settings.spintax") ? "" : "not" ?>"><?= __("Spintax Support") ?></span>
                                             </div>
+											<div class="feature">
+    <div class="title"><?= __("Reactions Features") ?>:</div>
+    <?php $package_modules = $p->get("settings.modules") ?>
+    <li class="sub-title"><?= __("Vote types") ?></li>
+    <?php if (!in_array("reactions-settings-u-polls-disable", $package_modules)): ?>
+        <?= __("Polls") ?></br>
+    <?php else: ?>
+        <del><?= __("Polls") ?></del></br>
+    <?php endif ?>
+    <?php if (!in_array("reactions-settings-u-poll-sliders-disable", $package_modules)): ?>
+        <?= __("Poll sliders") ?></br>
+    <?php else: ?>
+        <del><?= __("Poll sliders") ?></del></br>
+    <?php endif ?>
+    <?php if (!in_array("reactions-settings-u-quizzes-disable", $package_modules)): ?>
+        <?= __("Quizzes") ?></br>
+    <?php else: ?>
+        <del><?= __("Quizzes") ?></del></br>
+    <?php endif ?>
+    <?php if (!in_array("reactions-settings-u-countdowns-disable", $package_modules)): ?>
+        <?= __("Countdowns") ?></br>
+    <?php else: ?>
+        <del><?= __("Countdowns") ?></del></br>
+    <?php endif ?>
+    <?php if (!in_array("reactions-settings-u-answers-disable", $package_modules)): ?>
+        <?= __("Answers") ?></br>
+    <?php else: ?>
+        <del><?= __("Answers") ?></del></br>
+    <?php endif ?>
+    <li class="sub-title"><?= __("Extra Features") ?></li>
+    <?php if (in_array("reactions-settings-u-custom-delay", $package_modules)): ?>
+        <?= __("Custom Delays per account") ?></br>
+    <?php else: ?>
+        <del><?= __("Custom Delays per account") ?></del></br>
+    <?php endif ?>
+    <?php if (!in_array("reactions-settings-u-dm-disable", $package_modules)): ?>
+        <?= __("Reply to pending DM requests") ?></br>
+    <?php else: ?>
+        <del><?= __("Reply to pending DM requests") ?></del></br>
+    <?php endif ?>
+    <?php if (!in_array("reactions-settings-u-telegram-disable", $package_modules)): ?>
+        <?= __("Telegram Notifications") ?></br>
+    <?php else: ?>
+        <del><?= __("Telegram Notifications") ?></del></br>
+    <?php endif ?>
+    <?php if (!in_array("reactions-settings-u-filtration-disable", $package_modules)): ?>
+        <?= __("Filtration by min/max followers") ?></br>
+    <?php else: ?>
+        <del><?= __("Filtration by min/max followers") ?></del></br>
+    <?php endif ?>
+    <?php if (!in_array("reactions-settings-u-pause-disable", $package_modules)): ?>
+        <?= __("Task pause") ?></br>
+    <?php else: ?>
+        <del><?= __("Task pause") ?></del></br>
+    <?php endif ?>
+    <?php 
+        $package_modules_special = $p->get("settings.modules");
+        $target_limit_count = __("Unlimited");
+        foreach ($package_modules_special as $key => $pm_s) {
+            if (is_object($pm_s)) {
+                if (isset($pm_s->reactions_settings)) {
+                    $target_limit_count = $package_settings[$p->get("id")]["target_limit"];
+                    break;
+                }
+            }
+        }
+    ?>
+    <div>
+        <?= __("Targets limit:") . " " . $target_limit_count ?> 
+    </div>
+</div>
 
                                             <div class="feature">
                                                 <?= __("Storage") ?>:
@@ -384,3 +474,4 @@
                 </div>
             <?php endif ?>
         </div>
+		

@@ -352,90 +352,53 @@ class Story extends RequestCollection
     /**
      * Mark story media item as seen with web API
      */
-    public function markMediaSeenGraph($reelMediaId, $reelMediaOwnerId, $reelMediaTakenAt)
+    public function markMediaSeenGraph(
+        $reelMediaId, 
+        $reelMediaOwnerId, 
+        $reelMediaTakenAt,
+        $rollout_hash)
     {    
-        $csrftoken  = $this->ig->client->getToken();
-        $mid        = $this->ig->client->getMid();
-        $ds_user_id = $this->ig->client->getDSUserId();
-        $sessionid  = $this->ig->client->getSessionID();
-        $urlgen     = $this->ig->client->getURLGen();
-        $rur        = $this->ig->client->getRUR();
-        $proxy      = $this->ig->client->getProxy();
-
-        $curl = curl_init();
-
-        curl_setopt_array($curl, [
-            CURLOPT_URL            => "https://www.instagram.com/stories/reel/seen",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING       => "",
-            CURLOPT_MAXREDIRS      => 10,
-            CURLOPT_TIMEOUT        => 0,
-            CURLOPT_USERAGENT      => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36",
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST  => "POST",
-            CURLOPT_POSTFIELDS     => [
-                'reelMediaId'      => $reelMediaId,
-                'reelMediaOwnerId' => $reelMediaOwnerId,
-                'reelId'           => $reelMediaOwnerId,
-                'reelMediaTakenAt' => $reelMediaTakenAt,
-                'viewSeenAt'       => $reelMediaTakenAt
-            ],
-            CURLOPT_HTTPHEADER     => [
-                "referrer: https://www.instagram.com/",
-                "x-ig-app-id: 936619743392459",
-                "x-instagram-ajax: f9e28d162740",
-                "sec-fetch-site: same-origin",
-                "sec-fetch-mode: cors",
-                "sec-fetch-dest: empty",
-                "accept: */*",
-                "accept-encoding: gzip, deflate, br",
-                "x-ig-www-claim: hmac.AR3VWu1WbtgZTYm1LI-JdffO71nek5ezN2CM-bQ6iN6n1Dka",
-                "x-requested-with: XMLHttpRequest",
-                "x-csrftoken: " . $csrftoken,
-                "Content-Type: application/x-www-form-urlencoded",
-                "Cookie: mid=".$mid."; ds_user_id=$ds_user_id; csrftoken=$csrftoken; sessionid=$sessionid; rur=$rur; urlgen=$urlgen"
-            ],
-        ]);
-        
-        if ($proxy) {
-            $parts = parse_url($proxy);
-    
-            if (!$parts || !isset($parts['host'])) {
-                throw new \InvalidArgumentException('Invalid proxy URL "' . $proxy . '"'); 
-            }
-                    
-            if (!isset($parts['scheme']) || ($parts['scheme'] !== 'http' && $parts['scheme'] !== 'https')) { 
-				$parts['scheme'] = 'http';
-			}
-        
-            if (isset($parts['user'])) {
-                $proxyAuth = $parts['user'] . ':' . $parts['pass'];
-            } else {
-                $proxyAuth = false;
-            }
-    
-            $proxyAddress = $parts['scheme'] . '://' . $parts['host'] . ':' . $parts['port'];
-    
-            curl_setopt($curl, CURLOPT_PROXY, $proxyAddress);
-    
-            if ($proxyAuth) {
-                curl_setopt($curl, CURLOPT_PROXYUSERPWD, $proxyAuth);
-            }
+        if ($reelMediaId == null) {
+            throw new \InvalidArgumentException('Empty $reelMediaId sent to markMediaSeenGraph() function.');
         }
 
-        $response = curl_exec($curl);
+        if ($reelMediaOwnerId == null) {
+            throw new \InvalidArgumentException('Empty $reelMediaOwnerId sent to markMediaSeenGraph() function.');
+        }
 
-        curl_close($curl);
+        if ($reelMediaTakenAt == null) {
+            throw new \InvalidArgumentException('Empty $reelMediaTakenAt sent to markMediaSeenGraph() function.');
+        }
 
-        return $response;
+        if ($rollout_hash == null) {
+            throw new \InvalidArgumentException('Empty $rollout_hash sent to markMediaSeenGraph() function.');
+        }
+
+        $request = $this->ig->request("https://www.instagram.com/stories/reel/seen")
+            ->setAddDefaultHeaders(false)
+            ->setSignedPost(false)
+            ->setIsBodyCompressed(false)
+            ->addHeader('X-CSRFToken', $this->ig->client->getToken())
+            ->addHeader('Referer', 'https://www.instagram.com/')
+            ->addHeader('Host', 'www.instagram.com')
+            ->addHeader('X-Requested-With', 'XMLHttpRequest')
+            ->addHeader('X-Instagram-AJAX', $rollout_hash)
+            ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
+            ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
+            ->addPost('reelMediaId', $reelMediaId)
+            ->addPost('reelMediaOwnerId', $reelMediaOwnerId)
+            ->addPost('reelId', $reelMediaOwnerId)
+            ->addPost('reelMediaTakenAt', $reelMediaTakenAt)
+            ->addPost('viewSeenAt', $reelMediaTakenAt);
+
+        return $request->getResponse(new Response\GenericResponse());
     }
 
     /**
      * Mark story media item as seen with web API (v2, just name changed for compatibility with some scripts)
      */
-    public function markMediaSeenWeb($reelMediaId, $reelMediaOwnerId, $reelMediaTakenAt)
-    {        
+    public function markMediaSeenWeb($reelMediaId, $reelMediaOwnerId, $reelMediaTakenAt) {
         $csrftoken  = $this->ig->client->getToken();
         $mid        = $this->ig->client->getMid();
         $ds_user_id = $this->ig->client->getDSUserId();

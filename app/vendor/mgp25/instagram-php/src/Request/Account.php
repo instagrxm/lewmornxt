@@ -165,7 +165,7 @@ class Account extends RequestCollection
     /**
      * Changes your account's profile picture.
      *
-     * @param string $photoFilename The photo filename or link to file
+     * @param string $photoFilename the photo filename with path
      *
      * @throws \InvalidArgumentException
      * @throws \InstagramAPI\Exception\InstagramException
@@ -176,24 +176,18 @@ class Account extends RequestCollection
         $photoFilename)
     {
         if (!$photoFilename) {
-            throw new \InvalidArgumentException("Empty photo file path or link sent to changeProfilePicture() function.");
+            throw new \InvalidArgumentException("Empty photo filename with path sent to changeProfilePicture() function.");
         }
-
-        $temp = tmpfile();
-        fwrite($temp, file_get_contents($photoFilename));
-        $photoFilename = stream_get_meta_data($temp)['uri'];
 
         $internalMetadata = new InternalMetadata(Utils::generateUploadId(true));
         $internalMetadata->setPhotoDetails(Constants::FEED_TIMELINE, $photoFilename);
         $uploadResponse = $this->ig->internal->uploadPhotoData(Constants::FEED_TIMELINE, $internalMetadata);
 
-        fclose($temp);
-
         return $this->ig->request('accounts/change_profile_picture/')
             ->addPost('_csrftoken', $this->ig->client->getToken())
             ->addPost('_uuid', $this->ig->uuid)
             ->addPost('use_fbuploader', true)
-            ->addFile('upload_id', $internalMetadata->getUploadId())
+            ->addPost('upload_id', $internalMetadata->getUploadId())
             ->getResponse(new Response\UserInfoResponse());
     }
 

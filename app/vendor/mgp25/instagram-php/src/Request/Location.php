@@ -1,9 +1,12 @@
 <?php
+
 namespace InstagramAPI\Request;
 use InstagramAPI\Exception\RequestHeadersTooLargeException;
 use InstagramAPI\Response;
 use InstagramAPI\Signatures;
+use InstagramAPI\Constants;
 use InstagramAPI\Utils;
+
 /**
  * Functions related to finding and exploring locations.
  */
@@ -251,7 +254,16 @@ class Location extends RequestCollection
 
         return $request = $this->ig->request("graphql/query/")
             ->setVersion(5)
+            ->setAddDefaultHeaders(false)
             ->setSignedPost(false)
+            ->setIsBodyCompressed(false)
+            ->addHeader('X-CSRFToken', $this->ig->client->getToken())
+            ->addHeader('Referer', 'https://www.instagram.com/')
+            ->addHeader('Host', 'www.instagram.com')
+            ->addHeader('X-Requested-With', 'XMLHttpRequest')
+            ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
+            ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
             ->addParam('query_hash', '36bd0f2bf5911908de389b8ceaa3be6d')
             ->addParam('variables', json_encode([
                 "id" => $locationId,

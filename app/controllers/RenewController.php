@@ -31,7 +31,7 @@ class RenewController extends Controller
         $Plugins->where("is_active", 1)
                 ->whereIn("idname", [
                     "auto-follow", "auto-unfollow", "auto-like",
-                    "auto-comment", "welcomedm", "auto-repost"
+                    "auto-comment", "welcomedm", "auto-repost", "reactions",
                 ])->fetchData();
 
 
