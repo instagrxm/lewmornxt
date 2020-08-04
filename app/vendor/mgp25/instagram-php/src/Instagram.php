@@ -3,10 +3,10 @@
 namespace InstagramAPI;
 
 /**
- * Nextpost Private API for Instagram v.1.0.26 (customized)
+ * Nextpost Private API for Instagram v.1.0.38 (customized)
  * 
  * @version NEXTPOST
- * Last update: 28.05.2020
+ * Last update: 20.07.2020
  *
  * Each buyer of Nextpost PHP-script (originally developed by Postcode) 
  * have a license for the script and license for use this library.
@@ -1876,7 +1876,7 @@ class Instagram implements ExperimentsInterface
                 $this->people->getSharePrefill();
                 $this->direct->getPresences();
                 $this->direct->getInbox();
-                sleep(rand(1,3));
+                sleep(3);
                 $this->direct->getInbox(null, 20, 10);
                 $this->_registerPushChannels();
             } finally {
@@ -2081,6 +2081,67 @@ class Instagram implements ExperimentsInterface
         return new Request($this, $url);
     }
 
+    /**
+     * Send analytics and events to Instagram's Analytics Server (mobile API version)
+     *
+     * @param array $data Analytics and event data array.
+     *
+     * @throws \InstagramAPI\Exception\InstagramException
+     *
+     * @return \InstagramAPI\Response\ClientEventLogsResponse
+     */
+    public function sendClientEventLogs(
+        array $data)
+    {
+        $message = base64_encode(gzcompress(json_encode($data)));
+        $message = urlencode($message); // Yep, we must URL-encode this data!
+
+        return $this->request('logging_client_events')
+            ->setVersion(4)
+            ->setNeedsAuth(false)
+            ->setSignedPost(false)
+            ->addHeader('Host', 'graph.instagram.com')
+            ->addPost('access_token', Constants::ANALYTICS_ACCESS_TOKEN)
+            ->addPost('format', 'json')
+            ->addFileData('cmsg', $message, 'cmsg')
+            ->addPost('sent_time', sprintf('%.3f', microtime(true)))
+            ->addPost('cmethod', 'deflate')
+            ->getDecodedResponse(false);
+    }
+
+    /**
+     * Send analytics and events to Instagram's Analytics Server (web API version)
+     *
+     * @param array $data Analytics and event data array.
+     *
+     * @throws \InstagramAPI\Exception\InstagramException
+     *
+     * @return \InstagramAPI\Response\ClientEventLogsResponse
+     */
+    public function sendClientEventLogsGraph(
+        array $data)
+    {
+        return $this->request('logging_client_events')
+            ->setVersion(4)
+            ->setNeedsAuth(false)
+            ->setSignedPost(false)
+            ->setAddDefaultHeaders(false)
+            ->setGuzzleOptions([
+                'curl' => [
+                    CURLOPT_HTTPHEADER => [
+                        'Cookie: ',
+                        'X-MID: ',
+                        'Origin: https://www.instagram.com',
+                        'Referer: https://www.instagram.com/',
+                        'User-Agent: ' . sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->device->getAndroidRelease())
+                    ]
+                ]
+            ])
+            ->addPost('access_token', Constants::WEB_ANALYTICS_ACCESS_TOKEN)
+            ->addPost('message', json_encode($data, JSON_UNESCAPED_SLASHES))
+            ->getDecodedResponse(false);
+    }
+
     public static function getStringBetween($string, $start, $end){
         $string = ' ' . $string;
         $ini = strpos($string, $start);
@@ -2109,7 +2170,7 @@ class Instagram implements ExperimentsInterface
         return [
             "rollout_hash" => self::getStringBetween($response, '"rollout_hash":"', '"'),
             "device_id" => self::getStringBetween($response, '"device_id":"', '"'),
-            "public_key" => self::getStringBetween($response, '"public_key":"', '"'),
+            "public_key" => self::getStringBetween($response, '"public_key":"', '"')
         ];
     }
 }

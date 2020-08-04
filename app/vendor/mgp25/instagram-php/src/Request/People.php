@@ -471,7 +471,16 @@ class People extends RequestCollection
 
         return $request = $this->ig->request("graphql/query/")
             ->setVersion(5)
+            ->setAddDefaultHeaders(false)
             ->setSignedPost(false)
+            ->setIsBodyCompressed(false)
+            ->addHeader('X-CSRFToken', $this->ig->client->getToken())
+            ->addHeader('Referer', 'https://www.instagram.com/')
+            ->addHeader('Host', 'www.instagram.com')
+            ->addHeader('X-Requested-With', 'XMLHttpRequest')
+            ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
+            ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
             ->addParam('query_hash', 'c76146de99bb02f6415203be841dd25a')
             ->addParam('variables', json_encode([
                 "id" => $userId,
@@ -964,6 +973,7 @@ class People extends RequestCollection
      * Like the media with web API
      *
      * @param string      $mediaId        Numerical Media ID.
+     * @param string      $rollout_hash   Use function getDataFromWeb() from /src/Instagram.php to get this constant
      *
      * @throws \InvalidArgumentException
      * @throws \InstagramAPI\Exception\InstagramException
@@ -979,7 +989,7 @@ class People extends RequestCollection
         }
 
         if ($rollout_hash == null || !is_string($rollout_hash)) {
-            throw new \InvalidArgumentException('Empty or incorrect $rollout_hash sent to followWeb() function.');
+            throw new \InvalidArgumentException('Empty or incorrect $rollout_hash sent to likeWeb() function.');
         }
 
         $request = $this->ig->request("https://instagram.com/web/likes/{$mediaId}/like/")
@@ -987,9 +997,11 @@ class People extends RequestCollection
             ->setSignedPost(false)
             ->addHeader('X-CSRFToken', $this->ig->client->getToken())
             ->addHeader('Referer', 'https://www.instagram.com/')
+            ->addHeader('Host', 'www.instagram.com')
             ->addHeader('X-Requested-With', 'XMLHttpRequest')
             ->addHeader('X-Instagram-AJAX', $rollout_hash)
-            ->addHeader('X-IG-App-ID', Constants::INSTAGRAN_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
             ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
             ->addPost('', '');
 
@@ -1000,6 +1012,7 @@ class People extends RequestCollection
      * Like the media comment with web API
      *
      * @param string      $commentId        Numerical Comment ID.
+     * @param string      $rollout_hash   Use function getDataFromWeb() from /src/Instagram.php to get this constant
      *
      * @throws \InvalidArgumentException
      * @throws \InstagramAPI\Exception\InstagramException
@@ -1023,9 +1036,11 @@ class People extends RequestCollection
             ->setSignedPost(false)
             ->addHeader('X-CSRFToken', $this->ig->client->getToken())
             ->addHeader('Referer', 'https://www.instagram.com/')
+            ->addHeader('Host', 'www.instagram.com')
             ->addHeader('X-Requested-With', 'XMLHttpRequest')
             ->addHeader('X-Instagram-AJAX', $rollout_hash)
-            ->addHeader('X-IG-App-ID', Constants::INSTAGRAN_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
             ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
             ->addPost('', '');
 
@@ -1036,6 +1051,7 @@ class People extends RequestCollection
      * Follow user with web API
      *
      * @param string       $userId       Numerical User PK ID.
+     * @param string       $rollout_hash   Use function getDataFromWeb() from /src/Instagram.php to get this constant
      *
      * @throws \InvalidArgumentException
      * @throws \InstagramAPI\Exception\InstagramException
@@ -1064,9 +1080,11 @@ class People extends RequestCollection
             ->addHeader('X-CSRFToken', $this->ig->client->getToken())
             ->addHeader('Origin', 'https://www.instagram.com/')
             ->addHeader('Referer', 'https://www.instagram.com/' . $username . '/')
+            ->addHeader('Host', 'www.instagram.com')
             ->addHeader('X-Requested-With', 'XMLHttpRequest')
             ->addHeader('X-Instagram-AJAX', $rollout_hash)
-            ->addHeader('X-IG-App-ID', Constants::INSTAGRAN_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
             ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
             ->addPost('', '');
 
@@ -1077,6 +1095,7 @@ class People extends RequestCollection
      * Unfollow user with web API
      *
      * @param string      $userId       Numerical User PK ID.
+     * @param string      $rollout_hash   Use function getDataFromWeb() from /src/Instagram.php to get this constant
      *
      * @throws \InvalidArgumentException
      * @throws \InstagramAPI\Exception\InstagramException
@@ -1093,7 +1112,7 @@ class People extends RequestCollection
         }
 
         if ($username == null) {
-            throw new \InvalidArgumentException('Empty $username sent to followWeb() function.');
+            throw new \InvalidArgumentException('Empty $username sent to unfollowWeb() function.');
         }
 
         if ($rollout_hash == null || !is_string($rollout_hash)) {
@@ -1106,9 +1125,11 @@ class People extends RequestCollection
             ->addHeader('X-CSRFToken', $this->ig->client->getToken())
             ->addHeader('Origin', 'https://www.instagram.com/')
             ->addHeader('Referer', 'https://www.instagram.com/' . $username . '/')
+            ->addHeader('Host', 'www.instagram.com')
             ->addHeader('X-Requested-With', 'XMLHttpRequest')
             ->addHeader('X-Instagram-AJAX', $rollout_hash)
-            ->addHeader('X-IG-App-ID', Constants::INSTAGRAN_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
             ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
             ->addPost('', '');
 
@@ -1633,5 +1654,131 @@ class People extends RequestCollection
                 "after" => $end_cursor,
             ]))
             ->getResponse(new Response\GraphqlResponse());
+    }
+
+    /**
+     * Section: Hypervoter functions
+     */
+
+    public function likeCommentWebs(
+        $commentId,
+         $rollout_hash = 'f9e28d162740')
+    {
+        if ($commentId == null) {
+            throw new \InvalidArgumentException('Empty $commentId sent to likeCommentWeb() function.');
+        }
+
+        if ($rollout_hash == null || !is_string($rollout_hash)) {
+            throw new \InvalidArgumentException('Empty or incorrect $rollout_hash sent to likeCommentWeb() function.');
+        }
+
+        $request = $this->ig->request("https://instagram.com/web/comments/like/{$commentId}/")
+            ->setAddDefaultHeaders(false)
+            ->setSignedPost(false)
+            ->addHeader('X-CSRFToken', $this->ig->client->getToken())
+            ->addHeader('Referer', 'https://www.instagram.com/' . $postcode . '/')
+            ->addHeader('X-Requested-With', 'XMLHttpRequest')
+            ->addHeader('X-IG-Connection-Type', 'WiFi')
+            ->addHeader('X-IG-Connection-Speed', '1432kbps')
+            ->addHeader('Accept', '*/*')
+            ->addHeader('Host', 'i.instagram.com')
+            ->addHeader('X-Instagram-AJAX', $rollout_hash)
+            ->addHeader('X-IG-App-ID', '1217981644879628')
+            ->addHeader('sec-fetch-mode', 'cors')
+            ->addHeader('sec-fetch-dest', 'empty')
+            ->addHeader('origin', 'https://www.instagram.com')
+            ->addHeader('accept-encoding', 'gzip, deflate, br')
+            ->addHeader('x-ig-www-claim', 'hmac.AR0wW9PSDNz5VSoxDtEeeugeDX-ntKppg1vvRYROK7RqAh5T')
+            ->addHeader('Accept-Language', 'en-RO;q=1')
+            ->addHeader('sec-fetch-site', 'same-origin')
+            ->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4103.88 Mobile/15E148 Safari/604.1')
+            ->addPost('', '');
+
+        return $request->getResponse(new Response\GenericResponse());
+    }
+
+    public function commentWeb(
+        $mediaId,
+        $postcode,
+        $commentText,
+        $rollout_hash = 'f9e28d162740')
+    {
+        if ($mediaId == null) {
+            throw new \InvalidArgumentException('Empty $mediaId sent to commentWeb() function.');
+        }
+
+        if ($commentText == null) {
+            throw new \InvalidArgumentException('Empty $commentText sent to commentWeb() function.');
+        }
+
+        if ($rollout_hash == null || !is_string($rollout_hash)) {
+            throw new \InvalidArgumentException('Empty or incorrect $rollout_hash sent to commentWeb() function.');
+        }
+
+        $request = $this->ig->request("https://www.instagram.com/web/comments/{$mediaId}/add/")
+            ->setAddDefaultHeaders(false)
+            ->setSignedPost(false)
+            ->addHeader('X-CSRFToken', $this->ig->client->getToken())
+            ->addHeader('Referer', 'https://www.instagram.com/' . $postcode . '/comments/')
+            ->addHeader('X-Requested-With', 'XMLHttpRequest')
+            ->addHeader('X-IG-Connection-Type', 'WiFi')
+            ->addHeader('X-IG-Connection-Speed', '1432kbps')
+            ->addHeader('Accept', '*/*')
+            ->addHeader('Host', 'i.instagram.com')
+            ->addHeader('X-Instagram-AJAX', $rollout_hash)
+            ->addHeader('X-IG-App-ID', '1217981644879628')
+            ->addHeader('sec-fetch-mode', 'cors')
+            ->addHeader('sec-fetch-dest', 'empty')
+            ->addHeader('origin', 'https://www.instagram.com')
+            ->addHeader('accept-encoding', 'gzip, deflate, br')
+            ->addHeader('x-ig-www-claim', 'hmac.AR0wW9PSDNz5VSoxDtEeeugeDX-ntKppg1vvRYROK7RqAh5T')
+            ->addHeader('Accept-Language', 'en-RO;q=1')
+            ->addHeader('sec-fetch-site', 'same-origin')
+            ->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4103.88 Mobile/15E148 Safari/604.1')
+            ->addPost('comment_text', $commentText);
+
+        return $request->getResponse(new Response\CommentResponse());
+    }
+
+    public function followWebs(
+        $userId, 
+        $username,
+        $rollout_hash = 'f9e28d162740') {
+        if ($userId == null) {
+            throw new \InvalidArgumentException('Empty $userId sent to followWeb() function.');
+        }
+
+        if ($username == null) {
+            throw new \InvalidArgumentException('Empty $username sent to followWeb() function.');
+        }
+
+        if ($rollout_hash == null || !is_string($rollout_hash)) {
+            throw new \InvalidArgumentException('Empty or incorrect $rollout_hash sent to followWeb() function.');
+        }
+        
+        $request = $this->ig->request("https://www.instagram.com/web/friendships/{$userId}/follow/")
+            ->setAddDefaultHeaders(false)
+            ->setSignedPost(false)
+            ->addHeader('X-CSRFToken', $this->ig->client->getToken())
+            ->addHeader('Origin', 'https://www.instagram.com/')
+            ->addHeader('Referer', 'https://www.instagram.com/' . $username . '/')
+            ->addHeader('X-Requested-With', 'XMLHttpRequest')
+            ->addHeader('X-IG-Connection-Type', 'WiFi')
+            ->addHeader('X-IG-Connection-Speed', '1432kbps')
+            ->addHeader('Accept', '*/*')
+            ->addHeader('Host', 'i.instagram.com')
+            ->addHeader('X-Instagram-AJAX', 'f9e28d162740')
+            ->addHeader('X-IG-App-ID', '936619743392459')
+            ->addHeader('sec-fetch-mode', 'cors')
+            ->addHeader('sec-fetch-dest', 'empty')
+            
+            ->addHeader('accept-encoding', 'gzip, deflate, br')
+            ->addHeader('x-ig-www-claim', 'hmac.AR0wW9PSDNz5VSoxDtEeeugeDX-ntKppg1vvRYROK7RqAh5T')
+            ->addHeader('Accept-Language', 'en-RO;q=1')
+            ->addHeader('sec-fetch-site', 'same-origin')
+            ->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4103.88 Mobile/15E148 Safari/604.1')
+            ->addPost('', '');
+
+        return $request->getResponse(new Response\FriendshipResponse());
     }
 }
