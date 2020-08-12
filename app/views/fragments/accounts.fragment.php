@@ -19,13 +19,48 @@
                                         </div>
 
                                         <div class="quick-info">
-                                            <?php if ($a->get("login_required")): ?>
+    										<?php if ($a->get("login_required")): ?>
                                                 <a class="color-danger" href="<?= APPURL."/accounts/".$a->get("id") ?>">
                                                     <span class='mdi mdi-information'></span>
                                                     <?= __("Re-login required!") ?>
                                                 </a>
                                             <?php endif ?>
-                                        </div>    
+                                        </div>   
+										<div class="device-type-section mt-10 mb-10">
+    <?php 
+        \InstagramAPI\Instagram::$allowDangerousWebUsageAtMyOwnRisk = true;
+        $st_config = [
+            "storage" => "file",
+            "basefolder" => SESSIONS_PATH."/".$a->get("user_id")."/",
+        ];
+        $IG = new \InstagramAPI\Instagram(false, false, $st_config);
+        $IG->settings->setActiveUser($a->get("username"));
+        if ($IG->getIsAndroidSession()): 
+    ?>
+        <span class="tooltip tippy device-type-description" 
+            data-account-id="<?= $a->get("id") ?>"
+            data-position="top"
+            data-size="small"
+            title="<?= __('We emulating in real-time device with selected platform. All made actions are similar to real app actions.') ?>">
+            <span class="device-type android">
+                <span class="mdi mdi-android"></span>
+                <span><?= __('Android') ?></span>
+            </span>
+        </span>
+    <?php else: ?>
+        <span class="tooltip tippy device-type-description" 
+            data-account-id="<?= $a->get("id") ?>"
+            data-position="top"
+            data-size="small"
+            title="<?= __('We emulating in real-time device with selected platform. All made actions are similar to real app actions.') ?>">
+            <span class="device-type ios">
+                <span class="mdi mdi-apple"></span>
+                <span><?= __('iOS') ?></span>
+            </span>
+        </span>
+    <?php endif ?>
+</div>
+										
                                     </div>
 
                                     <div class="options context-menu-wrapper">
@@ -34,12 +69,21 @@
                                         <div class="context-menu">
                                             <ul>
                                                 <li>
-                                                    <a href="<?= APPURL."/accounts/".$a->get("id") ?>">
-                                                        <?= __("Edit") ?>
-                                                    </a>
-                                                </li>
-
-                                                <li>
+    <a href="javascript:void(0)" 
+        class="js-switch-platform"
+        data-id="<?= $a->get("id") ?>" 
+        data-url="<?= APPURL."/accounts" ?>">
+        <?= __("Switch platform") ?>
+    </a>
+</li>
+<li>
+    <a href="javascript:void(0)" 
+        class="js-remove-list-item" 
+        data-id="<?= $a->get("id") ?>" 
+        data-url="<?= APPURL."/accounts" ?>">
+        <?= __("Delete") ?>
+    </a>
+</li>
                                                     <a href="javascript:void(0)" 
                                                        class="js-remove-list-item" 
                                                        data-id="<?= $a->get("id") ?>" 

@@ -233,12 +233,14 @@ class UserController extends Controller
             }
             $settings["max_accounts"] = $accounts;
 
-            // File pickers
-            $settings["file_pickers"] = [
-                "dropbox" => (boolean)Input::post("dropbox"),
-                "onedrive" => (boolean)Input::post("onedrive"),
-                "google_drive" => (boolean)Input::post("google-drive")
-            ];
+            // Enable iOS API
+$settings["ios_api_enabled"] = (boolean)Input::post("ios-api-enabled");
+// File pickers
+$settings["file_pickers"] = [
+    "dropbox" => (boolean)Input::post("dropbox"),
+    "onedrive" => (boolean)Input::post("onedrive"),
+    "google_drive" => (boolean)Input::post("google-drive")
+];
 
             // Post Types
             $settings["post_types"] = [
