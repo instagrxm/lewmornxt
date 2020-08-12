@@ -53,7 +53,15 @@ class InstagramController extends Controller
             "storage" => "file",
             "basefolder" => SESSIONS_PATH."/".$Account->get("user_id")."/",
         ];
-        $Instagram = new \InstagramAPI\Instagram(false, false, $storage_config);
+        // Platform detection
+$IGDevice = new \InstagramAPI\Instagram(false, false, $storage_config);
+$IGDevice->settings->setActiveUser($Account->get("username"));
+if ($IGDevice->getIsAndroidSession()) {
+    $platform = "android"; 
+} else {
+    $platform = "ios";
+}
+$Instagram = new \InstagramAPI\Instagram(false, false, $storage_config, $platform);
         $Instagram->setVerifySSL(SSL_ENABLED);
 
         // Check is valid proxy is available for the account

@@ -198,7 +198,22 @@ if (file_exists($session_dir)) {
             "basefolder" => SESSIONS_PATH."/".$AuthUser->get("id")."/",
         ];
 
-        $Instagram = new \InstagramAPI\Instagram(false, false, $storageConfig);
+        // iOS API modification
+$IG = new \InstagramAPI\Instagram(false, false, $storageConfig);
+if (Input::post("old-session")) {
+    $IG->settings->setActiveUser($this->username);
+    if ($IG->getIsAndroidSession()) {
+        $platform = "android";
+    } else {
+        $platform = "ios";
+    }
+} else {
+    $platform = "android";
+    if ($AuthUser->get("settings.ios_api_enabled")) {
+        $platform = "ios";
+    }
+}
+$Instagram = new \InstagramAPI\Instagram(false, false, $storageConfig, $platform);
         $Instagram->setVerifySSL(SSL_ENABLED);
 
         if ($this->proxy) {
@@ -355,7 +370,15 @@ if (file_exists($session_dir)) {
             "basefolder" => SESSIONS_PATH."/".$AuthUser->get("id")."/",
         ];
 
-        $Instagram = new \InstagramAPI\Instagram(false, false, $storageConfig);
+        // Platform detection
+$IGDevice = new \InstagramAPI\Instagram(false, false, $storageConfig);
+$IGDevice->settings->setActiveUser($username);
+if ($IGDevice->getIsAndroidSession()) {
+    $platform = "android"; 
+} else {
+    $platform = "ios";
+}
+$Instagram = new \InstagramAPI\Instagram(false, false, $storageConfig, $platform);
         $Instagram->setVerifySSL(SSL_ENABLED);
 
         if ($proxy) {
@@ -470,7 +493,15 @@ if (file_exists($session_dir)) {
             "basefolder" => SESSIONS_PATH."/".$AuthUser->get("id")."/",
         ];
 
-        $Instagram = new \InstagramAPI\Instagram(false, false, $storageConfig);
+        // Platform detection
+$IGDevice = new \InstagramAPI\Instagram(false, false, $storageConfig);
+$IGDevice->settings->setActiveUser($username);
+if ($IGDevice->getIsAndroidSession()) {
+    $platform = "android"; 
+} else {
+    $platform = "ios";
+}
+$Instagram = new \InstagramAPI\Instagram(false, false, $storageConfig, $platform);
         $Instagram->setVerifySSL(SSL_ENABLED);
 
         if ($proxy) {
@@ -558,7 +589,15 @@ if (file_exists($session_dir)) {
             "basefolder" => SESSIONS_PATH."/".$AuthUser->get("id")."/",
         ];
 
-        $Instagram = new \InstagramAPI\Instagram(false, false, $storageConfig);
+        // Platform detection
+$IGDevice = new \InstagramAPI\Instagram(false, false, $storageConfig);
+$IGDevice->settings->setActiveUser($username);
+if ($IGDevice->getIsAndroidSession()) {
+    $platform = "android"; 
+} else {
+    $platform = "ios";
+}
+$Instagram = new \InstagramAPI\Instagram(false, false, $storageConfig, $platform);
         $Instagram->setVerifySSL(SSL_ENABLED);
 
         if ($proxy) {
@@ -683,7 +722,15 @@ if (file_exists($session_dir)) {
             "basefolder" => SESSIONS_PATH."/".$AuthUser->get("id")."/",
         ];
 
-        $Instagram = new \InstagramAPI\Instagram(false, false, $storageConfig);
+        // Platform detection
+$IGDevice = new \InstagramAPI\Instagram(false, false, $storageConfig);
+$IGDevice->settings->setActiveUser($username);
+if ($IGDevice->getIsAndroidSession()) {
+    $platform = "android"; 
+} else {
+    $platform = "ios";
+}
+$Instagram = new \InstagramAPI\Instagram(false, false, $storageConfig, $platform);
         $Instagram->setVerifySSL(SSL_ENABLED);
 
         if ($proxy) {
