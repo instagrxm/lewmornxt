@@ -27,11 +27,11 @@
                                             <?php endif ?>
                                         </div>   
 										<div class="device-type-section mt-10 mb-10">
-    <?php 
-        \InstagramAPI\Instagram::$allowDangerousWebUsageAtMyOwnRisk = true;
-        $st_config = [
-            "storage" => "file",
-            "basefolder" => SESSIONS_PATH."/".$a->get("user_id")."/",
+                                        <?php 
+                                        \InstagramAPI\Instagram::$allowDangerousWebUsageAtMyOwnRisk = true;
+                                        $st_config = [
+                                        "storage" => "file",
+             "basefolder" => SESSIONS_PATH."/".$a->get("user_id")."/",
         ];
         $IG = new \InstagramAPI\Instagram(false, false, $st_config);
         $IG->settings->setActiveUser($a->get("username"));
@@ -59,7 +59,7 @@
             </span>
         </span>
     <?php endif ?>
-</div>
+                                      </div>
 										
                                     </div>
 
@@ -77,14 +77,7 @@
     </a>
 </li>
 <li>
-    <a href="javascript:void(0)" 
-        class="js-remove-list-item" 
-        data-id="<?= $a->get("id") ?>" 
-        data-url="<?= APPURL."/accounts" ?>">
-        <?= __("Delete") ?>
-    </a>
-</li>
-                                                    <a href="javascript:void(0)" 
+                                                      <a href="javascript:void(0)" 
                                                        class="js-remove-list-item" 
                                                        data-id="<?= $a->get("id") ?>" 
                                                        data-url="<?= APPURL."/accounts" ?>">
