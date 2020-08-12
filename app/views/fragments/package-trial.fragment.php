@@ -94,75 +94,59 @@
 
                                 <div class="col s12 m12 l5 l-last offset-l1 mb-40">
                                     <div class="mb-30">
-    <label class="form-label form-label--secondary"><?= __("Instagram API Settings") ?></label>
-    <div class="clearfix mt-15">
-        <div class="mb-10">
-            <label>
-                <input type="checkbox" 
-                        class="checkbox" 
-                        name="ios-api-enabled" 
-                        value="1" 
-                        <?= $TrialPackage->get("data.ios_api_enabled") ? "checked" : "" ?>>
-                <span>
-                    <span class="icon unchecked">
-                        <span class="mdi mdi-check"></span>
-                    </span>
-                    <?= __('Enable iOS API emulation') ?>
-                </span>
-            </label>
-        </div>
-    </div>
-</div>
-<div class="mb-30">
-    <label class="form-label form-label--secondary"><?= __("File Pickers") ?></label>
-    <div class="clearfix mt-15">
-        <div class="col s6 m6 l6 mb-10">
-            <label>
-                <input type="checkbox" 
-                        class="checkbox" 
-                        name="dropbox" 
-                        value="1" 
-                        <?= $TrialPackage->get("data.file_pickers.dropbox") ? "checked" : "" ?>>
-                <span>
-                    <span class="icon unchecked">
-                        <span class="mdi mdi-check"></span>
-                    </span>
-                    <?= __('Dropbox') ?>
-                </span>
-            </label>
-        </div>
-        <div class="col s6 s-last m6 m-last l6 l-last mb-10">
-            <label>
-                <input type="checkbox" 
-                        class="checkbox" 
-                        name="onedrive" 
-                        value="1" 
-                        <?= $TrialPackage->get("data.file_pickers.onedrive") ? "checked" : "" ?>>
-                <span>
-                    <span class="icon unchecked">
-                        <span class="mdi mdi-check"></span>
-                    </span>
-                    <?= __('OneDrive') ?>
-                </span>
-            </label>
-        </div>
-        <div class="col s6 m6 l6 mb-10">
-            <label>
-                <input type="checkbox" 
-                        class="checkbox" 
-                        name="google-drive" 
-                        value="1" 
-                        <?= $TrialPackage->get("data.file_pickers.google_drive") ? "checked" : "" ?>>
-                <span>
-                    <span class="icon unchecked">
-                        <span class="mdi mdi-check"></span>
-                    </span>
-                    <?= __('Google Drive') ?>
-                </span>
-            </label>
-        </div>
-    </div>
-</div>                                    <div class="mb-30">
+                                        <label class="form-label form-label--secondary"><?= __("File Pickers") ?></label>
+                                        <div class="clearfix mt-15">
+                                            <div class="col s6 m6 l6 mb-10">
+                                                <label>
+                                                    <input type="checkbox" 
+                                                           class="checkbox" 
+                                                           name="dropbox" 
+                                                           value="1" 
+                                                           <?= $TrialPackage->get("data.file_pickers.dropbox") ? "checked" : "" ?>>
+                                                    <span>
+                                                        <span class="icon unchecked">
+                                                            <span class="mdi mdi-check"></span>
+                                                        </span>
+                                                        <?= __('Dropbox') ?>
+                                                    </span>
+                                                </label>
+                                            </div>
+
+                                            <div class="col s6 s-last m6 m-last l6 l-last mb-10">
+                                                <label>
+                                                    <input type="checkbox" 
+                                                           class="checkbox" 
+                                                           name="onedrive" 
+                                                           value="1" 
+                                                           <?= $TrialPackage->get("data.file_pickers.onedrive") ? "checked" : "" ?>>
+                                                    <span>
+                                                        <span class="icon unchecked">
+                                                            <span class="mdi mdi-check"></span>
+                                                        </span>
+                                                        <?= __('OneDrive') ?>
+                                                    </span>
+                                                </label>
+                                            </div>
+
+                                            <div class="col s6 m6 l6 mb-10">
+                                                <label>
+                                                    <input type="checkbox" 
+                                                           class="checkbox" 
+                                                           name="google-drive" 
+                                                           value="1" 
+                                                           <?= $TrialPackage->get("data.file_pickers.google_drive") ? "checked" : "" ?>>
+                                                    <span>
+                                                        <span class="icon unchecked">
+                                                            <span class="mdi mdi-check"></span>
+                                                        </span>
+                                                        <?= __('Google Drive') ?>
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-30">
                                         <label class="form-label form-label--secondary"><?= __("Post Types") ?></label>
                                         <div class="clearfix mt-15">
                                             <div class="col s6 m6 l6 mb-10">
