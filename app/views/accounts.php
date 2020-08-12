@@ -45,10 +45,9 @@
         <?php require_once(APPPATH.'/inc/js-locale.inc.php'); ?>
         <script type="text/javascript" src="<?= APPURL."/assets/js/core.js?v=".VERSION ?>"></script>
         <script type="text/javascript" charset="utf-8">
-    $(function(){
-        NextPost.SwitchPlatform();
-    })
-</script>
+            $(function(){
+            })
+        </script>
 
         <?php require_once(APPPATH.'/views/fragments/google-analytics.fragment.php'); ?>
     </body>

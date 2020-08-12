@@ -81,14 +81,12 @@ class TrialPackageController extends Controller
         }
         $options["max_accounts"] = $accounts;
 
-        // Enable iOS API
-$options["ios_api_enabled"] = (boolean)Input::post("ios-api-enabled");
-// File pickers
-$options["file_pickers"] = [
-    "dropbox" => (boolean)Input::post("dropbox"),
-    "onedrive" => (boolean)Input::post("onedrive"),
-    "google_drive" => (boolean)Input::post("google-drive")
-];
+        // File pickers
+        $options["file_pickers"] = [
+            "dropbox" => (boolean)Input::post("dropbox"),
+            "onedrive" => (boolean)Input::post("onedrive"),
+            "google_drive" => (boolean)Input::post("google-drive")
+        ];
 
         // Post Types
         $options["post_types"] = [
