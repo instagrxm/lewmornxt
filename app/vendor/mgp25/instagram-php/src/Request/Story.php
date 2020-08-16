@@ -384,13 +384,17 @@ class Story extends RequestCollection
             ->addHeader('X-Requested-With', 'XMLHttpRequest')
             ->addHeader('X-Instagram-AJAX', $rollout_hash)
             ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
-            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
-            ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
-            ->addPost('reelMediaId', $reelMediaId)
-            ->addPost('reelMediaOwnerId', $reelMediaOwnerId)
-            ->addPost('reelId', $reelMediaOwnerId)
-            ->addPost('reelMediaTakenAt', $reelMediaTakenAt)
-            ->addPost('viewSeenAt', $reelMediaTakenAt);
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM);
+            if ($this->ig->getIsAndroid()) {
+                $request->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()));
+            } else {
+                $request->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS ' . Constants::IOS_VERSION . ' like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.4 Mobile/15E148 Safari/604.1');
+            }
+            $request->addPost('reelMediaId', $reelMediaId)
+                    ->addPost('reelMediaOwnerId', $reelMediaOwnerId)
+                    ->addPost('reelId', $reelMediaOwnerId)
+                    ->addPost('reelMediaTakenAt', $reelMediaTakenAt)
+                    ->addPost('viewSeenAt', $reelMediaTakenAt);
 
         return $request->getResponse(new Response\GenericResponse());
     }
