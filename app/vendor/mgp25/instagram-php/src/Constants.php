@@ -117,17 +117,4 @@ class Constants
     
     // IG_WEB_APPLICATION_ID|WEB_CLIENT_TOKEN
     const WEB_ANALYTICS_ACCESS_TOKEN = '936619743392459|3cdb3f896252a1db29679cb4554db266';
-
-    // iOS API constants
-    // Instagram 133.0.0.20.118 (iPhone10,2; iOS 13_3_1; en_US; en-US; scale=2.61; 1080x1920; 203469221)
-    const IG_IOS_VERSION      = '133.0.0.20.118';
-    const IOS_VERSION         = '13_3_1';
-    const IOS_MODEL           = 'iPhone10,2';
-    const IOS_DPI             = '1080x1920';
-    const IOS_SCALE           = '2.61';
-    const IG_IOS_VERSION_CODE = '203469221';
-    const SIG_KEY_IOS_VERSION = '5';
-    const IOS_IG_SIG_KEY      = 'f612a5bc5effcb371d0d8b89c9c65be8efc6b1c49e947f6c8d7be29d5587cb5f';
-    const IOS_BLOCKS_VERSIONING_ID = '119fcd8f9f9375b902d797fc323cce410e39e33b4ee5353bc160035f20abf813';
-    const IOS_X_IG_Capabilities = '36r/FwE=';
 }

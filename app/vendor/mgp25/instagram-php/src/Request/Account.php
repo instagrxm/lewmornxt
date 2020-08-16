@@ -644,7 +644,7 @@ class Account extends RequestCollection
     public function enableTwoFactorSMS(
         $phoneNumber,
         $verificationCode,
-        $trustDevice = true)
+        $trustDevice = false)
     {
         $cleanNumber = '+'.preg_replace('/[^0-9]/', '', $phoneNumber);
 

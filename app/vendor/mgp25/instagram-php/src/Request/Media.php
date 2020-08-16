@@ -208,15 +208,11 @@ class Media extends RequestCollection
             ->addPost('_csrftoken', $this->ig->client->getToken())
             ->addPost('device_id', $this->ig->device_id)
             ->addPost('media_id', $mediaId)
-            ->addPost('container_module', $module);
-
-        if ($this->ig->getIsAndroid()) {
-            $request->addPost('radio_type', $this->ig->radio_type)
-                ->addPost('feed_position', $feedPosition)
-                ->addPost('is_carousel_bumped_post', $carouselBumped);
-        } else {
-            $request->addPost('module_name', $module);
-        } 
+            ->addPost('container_module', $module)
+            ->addPost('radio_type', $this->ig->radio_type)
+            ->addPost('feed_position', $feedPosition)
+            ->addPost('is_carousel_bumped_post', $carouselBumped);
+            
 
         if (isset($extraData['carousel_media'])) {
             $request->addPost('carousel_index', $extraData['carousel_index']);
@@ -281,22 +277,6 @@ class Media extends RequestCollection
     }
 
     /**
-     * Get list of users who liked a media item.
-     *
-     * @param string $mediaId The media ID in Instagram's internal format (ie "3482384834_43294").
-     *
-     * @throws \InstagramAPI\Exception\InstagramException
-     *
-     * @return \InstagramAPI\Response\MediaLikersResponse
-     */
-    public function getLikers(
-        $mediaId)
-    {
-        return $this->ig->request("media/{$mediaId}/likers/")
-        ->getResponse(new Response\MediaLikersResponse());
-    }
-
-    /**
      * Get list of users who liked a media item (with Web API)
      *
      * @throws \InvalidArgumentException
@@ -330,11 +310,7 @@ class Media extends RequestCollection
             ->addHeader('X-Instagram-AJAX', $rollout_hash)
             ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
             ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM);
-            if ($this->ig->getIsAndroid()) {
-                $request->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()));
-            } else {
-                $request->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS ' . Constants::IOS_VERSION . ' like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.4 Mobile/15E148 Safari/604.1');
-            }
+            $request->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()));
             $request->addParam('query_hash', 'd5d763b1e2acf209d62d22d184488e57')
                     ->addParam('variables', json_encode([
                         "shortcode" => $shortcode,
@@ -343,6 +319,21 @@ class Media extends RequestCollection
                         "after" => $end_cursor
                     ]));
             return $request->getResponse(new Response\GraphqlResponse());
+    }
+
+    /**
+     * Get list of users who liked a media item.
+     *
+     * @param string $mediaId The media ID in Instagram's internal format (ie "3482384834_43294").
+     *
+     * @throws \InstagramAPI\Exception\InstagramException
+     *
+     * @return \InstagramAPI\Response\MediaLikersResponse
+     */
+    public function getLikers(
+        $mediaId)
+    {
+        return $this->ig->request("media/{$mediaId}/likers/")->getResponse(new Response\MediaLikersResponse());
     }
 
     /**
@@ -504,13 +495,9 @@ class Media extends RequestCollection
             ->addHeader('X-Requested-With', 'XMLHttpRequest')
             ->addHeader('X-Instagram-AJAX', $rollout_hash)
             ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
-            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM);
-            if ($this->ig->getIsAndroid()) {
-                $request->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()));
-            } else {
-                $request->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS ' . Constants::IOS_VERSION . ' like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.4 Mobile/15E148 Safari/604.1');
-            }
-            $request->addPost('comment_text', $commentText);
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
+            ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
+            ->addPost('comment_text', $commentText);
 
         return $request->getResponse(new Response\CommentResponse());
     }

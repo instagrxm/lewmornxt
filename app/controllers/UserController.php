@@ -233,10 +233,7 @@ class UserController extends Controller
             }
             $settings["max_accounts"] = $accounts;
 
-            // Enable iOS API
-            $settings["ios_api_enabled"] = (boolean)Input::post("ios-api-enabled");
-            
-			// File pickers
+            // File pickers
             $settings["file_pickers"] = [
                 "dropbox" => (boolean)Input::post("dropbox"),
                 "onedrive" => (boolean)Input::post("onedrive"),

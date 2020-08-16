@@ -48,10 +48,6 @@ class People extends RequestCollection
             $request->addParam('from_module', $module);
         }
 
-        if (!$this->ig->getIsAndroid()) {
-            $request->addParam('device_id', $this->ig->device_id);
-        }
-
         return $request->getResponse(new Response\UserInfoResponse());
     }
 
@@ -473,7 +469,7 @@ class People extends RequestCollection
             throw new \InvalidArgumentException('Empty $userId sent to getFollowersGraph() function.');
         }
 
-        $request = $this->ig->request("graphql/query/")
+        return $request = $this->ig->request("graphql/query/")
             ->setVersion(5)
             ->setAddDefaultHeaders(false)
             ->setSignedPost(false)
@@ -483,21 +479,17 @@ class People extends RequestCollection
             ->addHeader('Host', 'www.instagram.com')
             ->addHeader('X-Requested-With', 'XMLHttpRequest')
             ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
-            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM);
-            if ($this->ig->getIsAndroid()) {
-                $request->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()));
-            } else {
-                $request->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS ' . Constants::IOS_VERSION . ' like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.4 Mobile/15E148 Safari/604.1');
-            }
-            $request->addParam('query_hash', 'c76146de99bb02f6415203be841dd25a')
-                    ->addParam('variables', json_encode([
-                        "id" => $userId,
-                        "include_reel" => $include_reel ? true : false,
-                        "fetch_mutual" => false,
-                        "first" => $next_page,
-                        "after" => $end_cursor,
-                    ]));
-        return $request->getResponse(new Response\GraphqlResponse());
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
+            ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
+            ->addParam('query_hash', 'c76146de99bb02f6415203be841dd25a')
+            ->addParam('variables', json_encode([
+                "id" => $userId,
+                "include_reel" => $include_reel ? true : false,
+                "fetch_mutual" => false,
+                "first" => $next_page,
+                "after" => $end_cursor,
+            ]))
+            ->getResponse(new Response\GraphqlResponse());
     }
 
     /**
@@ -939,11 +931,8 @@ class People extends RequestCollection
             ->addPost('_uid', $this->ig->account_id)
             ->addPost('_csrftoken', $this->ig->client->getToken())
             ->addPost('user_id', $userId)
+            ->addPost('radio_type', $this->ig->radio_type)
             ->addPost('device_id', $this->ig->device_id);
-
-        if ($this->ig->getIsAndroid()) {
-            $request->addPost('radio_type', $this->ig->radio_type);
-        }
 
         if ($mediaId !== null) {
             $request->addPost('media_id_attribution', $mediaId);
@@ -971,11 +960,7 @@ class People extends RequestCollection
             ->addPost('_uid', $this->ig->account_id)
             ->addPost('_csrftoken', $this->ig->client->getToken())
             ->addPost('user_id', $userId)
-            ->addPost('device_id', $this->ig->device_id);
-
-        if ($this->ig->getIsAndroid()) {
-            $request->addPost('radio_type', $this->ig->radio_type);
-        }
+            ->addPost('radio_type', $this->ig->radio_type);
 
         if ($mediaId !== null) {
             $request->addPost('media_id_attribution', $mediaId);
@@ -1016,13 +1001,9 @@ class People extends RequestCollection
             ->addHeader('X-Requested-With', 'XMLHttpRequest')
             ->addHeader('X-Instagram-AJAX', $rollout_hash)
             ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
-            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM);
-        if ($this->ig->getIsAndroid()) {
-            $request->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()));
-        } else {
-            $request->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS ' . Constants::IOS_VERSION . ' like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.4 Mobile/15E148 Safari/604.1');
-        }
-        $request->addPost('', '');
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
+            ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
+            ->addPost('', '');
 
         return $request->getResponse(new Response\GenericResponse());
     }
@@ -1059,13 +1040,9 @@ class People extends RequestCollection
             ->addHeader('X-Requested-With', 'XMLHttpRequest')
             ->addHeader('X-Instagram-AJAX', $rollout_hash)
             ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
-            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM);
-            if ($this->ig->getIsAndroid()) {
-                $request->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()));
-            } else {
-                $request->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS ' . Constants::IOS_VERSION . ' like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.4 Mobile/15E148 Safari/604.1');
-            }
-            $request->addPost('', '');
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
+            ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
+            ->addPost('', '');
 
         return $request->getResponse(new Response\GenericResponse());
     }
@@ -1107,13 +1084,9 @@ class People extends RequestCollection
             ->addHeader('X-Requested-With', 'XMLHttpRequest')
             ->addHeader('X-Instagram-AJAX', $rollout_hash)
             ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
-            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM);
-            if ($this->ig->getIsAndroid()) {
-                $request->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()));
-            } else {
-                $request->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS ' . Constants::IOS_VERSION . ' like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.4 Mobile/15E148 Safari/604.1');
-            }
-            $request->addPost('', '');
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
+            ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
+            ->addPost('', '');
 
         return $request->getResponse(new Response\FriendshipResponse());
     }
@@ -1156,13 +1129,9 @@ class People extends RequestCollection
             ->addHeader('X-Requested-With', 'XMLHttpRequest')
             ->addHeader('X-Instagram-AJAX', $rollout_hash)
             ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
-            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM);
-            if ($this->ig->getIsAndroid()) {
-                $request->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()));
-            } else {
-                $request->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS ' . Constants::IOS_VERSION . ' like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.4 Mobile/15E148 Safari/604.1');
-            }
-            $request->addPost('', '');
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
+            ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
+            ->addPost('', '');
 
         return $request->getResponse(new Response\FriendshipResponse());
     }
