@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .gitattributes     export-ignore
 .github/           export-ignore
 .gitignore         export-ignore
@@ -9,3 +10,16 @@ phpcs.xml.dist     export-ignore
 phpunit.xml.dist   export-ignore
 resources/         export-ignore
 tests/             export-ignore
+=======
+.gitattributes     export-ignore
+.github/           export-ignore
+.gitignore         export-ignore
+.readthedocs.yml   export-ignore
+.travis.yml        export-ignore
+docs/              export-ignore
+phpbench.json      export-ignore
+phpcs.xml.dist     export-ignore
+phpunit.xml.dist   export-ignore
+resources/         export-ignore
+tests/             export-ignore
+>>>>>>> 93406d403370e91633bdbb3849fac6e7ddd3dc5f

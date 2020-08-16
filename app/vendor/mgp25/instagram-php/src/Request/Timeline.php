@@ -352,6 +352,50 @@ class Timeline extends RequestCollection
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Get a user's timeline feed.
+     *
+     * @param string      $userId Numerical UserPK ID.
+     * @param string|null $end_cursor  Next "maximum ID", used for pagination.
+     *
+     * @throws \InvalidArgumentException
+     * @throws \InstagramAPI\Exception\InstagramException
+     *
+     * @return \InstagramAPI\Response\GraphqlResponse
+     */
+    public function getUserFeedGraph(
+        $userId,
+        $next_page = 12,
+        $end_cursor = null)
+    {
+        if ($userId == null) {
+            throw new \InvalidArgumentException('Empty $userId sent to getUserFeedGraph() function.');
+        }
+
+        return $request = $this->ig->request("graphql/query/")
+            ->setVersion(5)
+            ->setAddDefaultHeaders(false)
+            ->setSignedPost(false)
+            ->setIsBodyCompressed(false)
+            ->addHeader('X-CSRFToken', $this->ig->client->getToken())
+            ->addHeader('Referer', 'https://www.instagram.com/')
+            ->addHeader('Host', 'www.instagram.com')
+            ->addHeader('X-Requested-With', 'XMLHttpRequest')
+            ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
+            ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
+            ->addParam('query_hash', '9dcf6e1a98bc7f6e92953d5a61027b98')
+            ->addParam('variables', json_encode([
+                "id" => $userId,
+                "first" => $next_page,
+                "after" => $end_cursor,
+            ]))
+            ->getResponse(new Response\GraphqlResponse());
+    }
+
+    /**
+>>>>>>> 93406d403370e91633bdbb3849fac6e7ddd3dc5f
      * Get your own timeline feed.
      *
      * @param string|null $maxId Next "maximum ID", used for pagination.

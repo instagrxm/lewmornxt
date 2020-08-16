@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 build
 .DS_Store
@@ -23,3 +24,30 @@ tools
 
 # Groc 
 node_modules
+=======
+
+build
+.DS_Store
+phpunit.local.xml
+*.log
+
+# IDE
+.idea
+.project
+.settings
+.buildpath
+atlassian-ide-plugin.xml
+*.bak
+
+# Composer
+vendor
+composer.lock
+composer.phar
+
+# Project
+var
+tools
+
+# Groc 
+node_modules
+>>>>>>> 93406d403370e91633bdbb3849fac6e7ddd3dc5f

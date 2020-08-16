@@ -288,7 +288,19 @@ class Hashtag extends RequestCollection
         return $request = $this->ig->request("graphql/query/")
             ->setVersion(5)
             ->setSignedPost(false)
+<<<<<<< HEAD
             ->addParam('query_hash', 'bd33792e9f52a56ae8fa0985521d141d')
+=======
+            ->setIsBodyCompressed(false)
+            ->addHeader('X-CSRFToken', $this->ig->client->getToken())
+            ->addHeader('Referer', 'https://www.instagram.com/')
+            ->addHeader('Host', 'www.instagram.com')
+            ->addHeader('X-Requested-With', 'XMLHttpRequest')
+            ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
+            ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
+            ->addParam('query_hash', '7dabc71d3e758b1ec19ffb85639e427b')
+>>>>>>> 93406d403370e91633bdbb3849fac6e7ddd3dc5f
             ->addParam('variables', json_encode([
                 "tag_name" => $hashtag,
                 "first" => $next_page,

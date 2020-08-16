@@ -403,10 +403,30 @@ class Story extends RequestCollection
 
             curl_setopt($curl, CURLOPT_PROXY, $proxyAddress);
 
+<<<<<<< HEAD
             if ($proxyAuth) {
                 curl_setopt($curl, CURLOPT_PROXYUSERPWD, $proxyAuth);
             }
         }
+=======
+        $request = $this->ig->request("https://www.instagram.com/stories/reel/seen")
+            ->setAddDefaultHeaders(false)
+            ->setSignedPost(false)
+            ->setIsBodyCompressed(false)
+            ->addHeader('X-CSRFToken', $this->ig->client->getToken())
+            ->addHeader('Referer', 'https://www.instagram.com/')
+            ->addHeader('Host', 'www.instagram.com')
+            ->addHeader('X-Requested-With', 'XMLHttpRequest')
+            ->addHeader('X-Instagram-AJAX', $rollout_hash)
+            ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
+            ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
+            ->addPost('reelMediaId', $reelMediaId)
+            ->addPost('reelMediaOwnerId', $reelMediaOwnerId)
+            ->addPost('reelId', $reelMediaOwnerId)
+            ->addPost('reelMediaTakenAt', $reelMediaTakenAt)
+            ->addPost('viewSeenAt', $reelMediaTakenAt);
+>>>>>>> 93406d403370e91633bdbb3849fac6e7ddd3dc5f
 
         $response = curl_exec($curl);
 

@@ -285,6 +285,66 @@ class Media extends RequestCollection
     }
 
     /**
+<<<<<<< HEAD
+     * Get list of users who liked a media item.
+     *
+     * @param string $mediaId The media ID in Instagram's internal format (ie "3482384834_43294").
+     *
+     * @throws \InstagramAPI\Exception\InstagramException
+     *
+     * @return \InstagramAPI\Response\MediaLikersResponse
+     */
+    public function getLikers(
+        $mediaId)
+    {
+        return $this->ig->request("media/{$mediaId}/likers/")->getResponse(new Response\MediaLikersResponse());
+=======
+     * Get list of users who liked a media item (with Web API)
+     *
+     * @throws \InvalidArgumentException
+     * @throws \InstagramAPI\Exception\InstagramException
+     *
+     * @return \InstagramAPI\Response\GraphqlResponse
+     */
+    public function getLikersGraph(
+        $shortcode,
+        $rollout_hash,
+        $next_page = 12,
+        $end_cursor = null,
+        $include_reel = false)
+    {
+        if ($shortcode == null) {
+            throw new \InvalidArgumentException('Empty $shortcode sent to getLikersGraph() function.');
+        }
+
+        if ($rollout_hash == null) {
+            throw new \InvalidArgumentException('Empty $rollout_hash sent to getLikersGraph() function.');
+        }
+
+        $request = $this->ig->request("https://www.instagram.com/graphql/query/")
+            ->setAddDefaultHeaders(false)
+            ->setSignedPost(false)
+            ->setIsBodyCompressed(false)
+            ->addHeader('X-CSRFToken', $this->ig->client->getToken())
+            ->addHeader('Referer', 'https://www.instagram.com/p/' . $shortcode . "/")
+            ->addHeader('Host', 'www.instagram.com')
+            ->addHeader('X-Requested-With', 'XMLHttpRequest')
+            ->addHeader('X-Instagram-AJAX', $rollout_hash)
+            ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM);
+            $request->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()));
+            $request->addParam('query_hash', 'd5d763b1e2acf209d62d22d184488e57')
+                    ->addParam('variables', json_encode([
+                        "shortcode" => $shortcode,
+                        "include_reel" => $include_reel ? true : false,
+                        "first" => $next_page,
+                        "after" => $end_cursor
+                    ]));
+            return $request->getResponse(new Response\GraphqlResponse());
+>>>>>>> 93406d403370e91633bdbb3849fac6e7ddd3dc5f
+    }
+
+    /**
      * Get list of users who liked a media item.
      *
      * @param string $mediaId The media ID in Instagram's internal format (ie "3482384834_43294").
@@ -421,6 +481,54 @@ class Media extends RequestCollection
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * Post a comment on a media item.
+     * 
+     * @param string      $mediaId        The media ID in Instagram's internal format (ie "3482384834_43294").
+     * @param string      $commentText    Your comment text.
+     * @param string      $rollout_hash   Use function getDataFromWeb() from /src/Instagram.php to get this constant
+     *
+     * @throws \InvalidArgumentException
+     * @throws \InstagramAPI\Exception\InstagramException
+     *
+     * @return \InstagramAPI\Response\CommentResponse
+     */
+    public function commentWeb(
+        $mediaId,
+        $commentText,
+        $rollout_hash)
+    {
+        if ($mediaId == null) {
+            throw new \InvalidArgumentException('Empty $mediaId sent to commentWeb() function.');
+        }
+
+        if ($commentText == null) {
+            throw new \InvalidArgumentException('Empty $commentText sent to commentWeb() function.');
+        }
+
+        if ($rollout_hash == null || !is_string($rollout_hash)) {
+            throw new \InvalidArgumentException('Empty or incorrect $rollout_hash sent to commentWeb() function.');
+        }
+
+        $request = $this->ig->request("https://www.instagram.com/web/comments/{$mediaId}/add/")
+            ->setAddDefaultHeaders(false)
+            ->setSignedPost(false)
+            ->addHeader('X-CSRFToken', $this->ig->client->getToken())
+            ->addHeader('Referer', 'https://www.instagram.com/')
+            ->addHeader('Host', 'www.instagram.com')
+            ->addHeader('X-Requested-With', 'XMLHttpRequest')
+            ->addHeader('X-Instagram-AJAX', $rollout_hash)
+            ->addHeader('X-IG-App-ID', Constants::IG_WEB_APPLICATION_ID)
+            ->addHeader('X-IG-WWW-Claim', Constants::X_IG_WWW_CLAIM)
+            ->addHeader('User-Agent', sprintf('Mozilla/5.0 (Linux; Android %s; Google) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Mobile Safari/537.36', $this->ig->device->getAndroidRelease()))
+            ->addPost('comment_text', $commentText);
+
+        return $request->getResponse(new Response\CommentResponse());
+    }
+
+    /**
+>>>>>>> 93406d403370e91633bdbb3849fac6e7ddd3dc5f
      * Get media comments.
      *
      * Note that this endpoint supports both backwards and forwards pagination.

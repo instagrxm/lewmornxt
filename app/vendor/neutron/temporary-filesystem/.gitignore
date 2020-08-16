@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 vendor
 composer.phar
 composer.lock
 .phpunit.result.cache
 /tests/phpunit_report/
+=======
+vendor
+composer.phar
+composer.lock
+.phpunit.result.cache
+/tests/phpunit_report/
+>>>>>>> 93406d403370e91633bdbb3849fac6e7ddd3dc5f
