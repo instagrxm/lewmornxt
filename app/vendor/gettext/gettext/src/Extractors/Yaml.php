@@ -21,7 +21,7 @@ class Yaml extends Extractor implements ExtractorInterface
         $messages = YamlParser::parse($string);
 
         if (is_array($messages)) {
-            static::fromArray($messages, $translations);
+            self::fromArray($messages, $translations);
         }
     }
 }

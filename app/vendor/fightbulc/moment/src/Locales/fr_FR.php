@@ -14,14 +14,13 @@ return array(
         "lastDay"  => '[Hier]',
         "lastWeek" => 'l [dernier]',
         "sameElse" => 'l',
-        "withTime" => '[à] G [h] i',
+        "withTime" => '[à] H:i',
         "default"  => 'd/m/Y',
     ),
     "relativeTime"  => array(
         "future" => 'dans %s',
         "past"   => 'il y a %s',
         "s"      => 'quelques secondes',
-        "ss"     => '%d secondes',
         "m"      => 'une minute',
         "mm"     => '%d minutes',
         "h"      => 'une heure',
@@ -35,7 +34,7 @@ return array(
     ),
     "ordinal"       => function ($number)
     {
-        return $number . ($number === 1 || $number === '1' ? '[er]' : '');
+        return $number . ($number === 1 ? '[er]' : '');
     },
     "week"          => array(
         "dow" => 1, // Monday is the first day of the week.

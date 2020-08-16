@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 
 /**
@@ -46,52 +45,3 @@ interface ArrayInterface extends
      */
     public function isEmpty(): bool;
 }
-=======
-<?php
-
-/**
- * This file is part of the ramsey/collection library
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
- */
-
-declare(strict_types=1);
-
-namespace Ramsey\Collection;
-
-use ArrayAccess;
-use Countable;
-use IteratorAggregate;
-use Serializable;
-
-/**
- * `ArrayInterface` provides traversable array functionality to data types.
- */
-interface ArrayInterface extends
-    ArrayAccess,
-    Countable,
-    IteratorAggregate,
-    Serializable
-{
-    /**
-     * Removes all items from this array.
-     */
-    public function clear(): void;
-
-    /**
-     * Returns a native PHP array representation of this array object.
-     *
-     * @return mixed[]
-     */
-    public function toArray(): array;
-
-    /**
-     * Returns `true` if this array is empty.
-     */
-    public function isEmpty(): bool;
-}
->>>>>>> 93406d403370e91633bdbb3849fac6e7ddd3dc5f

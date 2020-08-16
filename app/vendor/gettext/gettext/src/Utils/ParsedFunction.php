@@ -16,7 +16,7 @@ class ParsedFunction
 
     /**
      * The line where the function starts.
-     *
+     * 
      * @var int
      */
     protected $line;
@@ -93,7 +93,7 @@ class ParsedFunction
     /**
      * Add a string to the current argument.
      *
-     * @param string|null $chunk
+     * @param string $chunk
      */
     public function addArgumentChunk($chunk)
     {
@@ -121,17 +121,6 @@ class ParsedFunction
         }
         $this->comments[] = $comment;
     }
-
-    /**
-     * Return the line the function starts.
-     *
-     * @return int Line number.
-     */
-    public function getLine()
-    {
-        return $this->line;
-    }
-
     /**
      * A closing parenthesis was found: return the final data.
      * The array returned has the following values:
@@ -146,7 +135,7 @@ class ParsedFunction
     {
         $arguments = [];
         for ($i = 0; $i <= $this->argumentIndex; ++$i) {
-            $arguments[$i] = isset($this->arguments[$i]) ? $this->arguments[$i] : null;
+            $arguments[$i] = isset($this->arguments[$i]) ? $this->arguments[$i] : '';
         }
 
         return [

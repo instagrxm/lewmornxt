@@ -14,7 +14,6 @@ use Twig_Extensions_Extension_I18n;
 class Twig extends Extractor implements ExtractorInterface
 {
     public static $options = [
-        'extractComments' => 'notes:',
         'twig' => null,
     ];
 
@@ -25,7 +24,7 @@ class Twig extends Extractor implements ExtractorInterface
     {
         $options += static::$options;
 
-        $twig = $options['twig'] ?: static::createTwig();
+        $twig = $options['twig'] ?: self::createTwig();
 
         PhpCode::fromString($twig->compileSource(new Twig_Source($string, '')), $translations, $options);
     }
@@ -35,7 +34,7 @@ class Twig extends Extractor implements ExtractorInterface
      *
      * @return Twig_Environment
      */
-    protected static function createTwig()
+    private static function createTwig()
     {
         $twig = new Twig_Environment(new Twig_Loader_Array(['' => '']));
         $twig->addExtension(new Twig_Extensions_Extension_I18n());

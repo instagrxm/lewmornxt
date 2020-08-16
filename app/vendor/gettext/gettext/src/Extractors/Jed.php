@@ -14,7 +14,7 @@ class Jed extends Extractor implements ExtractorInterface
      */
     public static function fromString($string, Translations $translations, array $options = [])
     {
-        static::extract(json_decode($string, true), $translations);
+        self::extract(json_decode($string, true), $translations);
     }
 
     /**

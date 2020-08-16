@@ -22,11 +22,11 @@ class Mo extends Generator implements GeneratorInterface
         $messages = [];
 
         if ($options['includeHeaders']) {
-            $messages[''] = static::generateHeaders($translations);
+            $messages[''] = self::generateHeaders($translations);
         }
 
         foreach ($translations as $translation) {
-            if (!$translation->hasTranslation() || $translation->isDisabled()) {
+            if (!$translation->hasTranslation()) {
                 continue;
             }
 
@@ -63,15 +63,9 @@ class Mo extends Generator implements GeneratorInterface
                 }
             }
 
-            $originalsIndex[] = [
-                'relativeOffset' => strlen($originalsTable),
-                'length' => strlen($originalString)
-            ];
+            $originalsIndex[] = ['relativeOffset' => strlen($originalsTable), 'length' => strlen($originalString)];
             $originalsTable .= $originalString."\x00";
-            $translationsIndex[] = [
-                'relativeOffset' => strlen($translationsTable),
-                'length' => strlen($translationString)
-            ];
+            $translationsIndex[] = ['relativeOffset' => strlen($translationsTable), 'length' => strlen($translationString)];
             $translationsTable .= $translationString."\x00";
         }
 

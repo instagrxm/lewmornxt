@@ -352,8 +352,6 @@ class Timeline extends RequestCollection
     }
 
     /**
-<<<<<<< HEAD
-=======
      * Get a user's timeline feed.
      *
      * @param string      $userId Numerical UserPK ID.
@@ -395,7 +393,6 @@ class Timeline extends RequestCollection
     }
 
     /**
->>>>>>> 93406d403370e91633bdbb3849fac6e7ddd3dc5f
      * Get your own timeline feed.
      *
      * @param string|null $maxId Next "maximum ID", used for pagination.
@@ -451,6 +448,31 @@ class Timeline extends RequestCollection
             ->addPost('_csrftoken', $this->ig->client->getToken())
             ->addPost('media_id', $mediaId)
             ->getResponse(new Response\ArchiveMediaResponse());
+    }
+
+    /**
+     * Hides timeline feed posts from an unfollowed user.
+     *
+     * @param string $mediaId The media ID in Instagram's internal format (ie "3482384834_43294").
+     *                        "ALBUM", or the raw value of the Item's "getMediaType()" function.
+     * @param string $userId  Numerical UserPK ID.
+     *
+     * @throws \InvalidArgumentException
+     * @throws \InstagramAPI\Exception\InstagramException
+     *
+     * @return \InstagramAPI\Response\GenericResponse
+     */
+    public function hideFeedPost(
+        $mediaId,
+        $userId)
+    {
+        return $this->ig->request('feed/hide_feed_post/')
+            ->addPost('_uuid', $this->ig->uuid)
+            ->addPost('_uid', $this->ig->account_id)
+            ->addPost('_csrftoken', $this->ig->client->getToken())
+            ->addPost('a_pk', $userId)
+            ->addPost('m_pk', $mediaId)
+            ->getResponse(new Response\GenericResponse());
     }
 
     /**

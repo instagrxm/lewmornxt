@@ -20,9 +20,9 @@ abstract class BaseTranslator implements TranslatorInterface
      */
     public function register()
     {
-        $previous = static::$current;
+        $previous = self::$current;
 
-        static::$current = $this;
+        self::$current = $this;
 
         static::includeFunctions();
 

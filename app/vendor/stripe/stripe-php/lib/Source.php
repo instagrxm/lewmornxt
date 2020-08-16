@@ -5,24 +5,6 @@ namespace Stripe;
 /**
  * Class Source
  *
- * @property string $id
- * @property string $object
- * @property int $amount
- * @property string $client_secret
- * @property mixed $code_verification
- * @property int $created
- * @property string $currency
- * @property string $flow
- * @property bool $livemode
- * @property AttachedObject $metadata
- * @property mixed $owner
- * @property mixed $receiver
- * @property mixed $redirect
- * @property string $statement_descriptor
- * @property string $status
- * @property string $type
- * @property string $usage
- *
  * @package Stripe
  */
 class Source extends ApiResource
@@ -37,6 +19,17 @@ class Source extends ApiResource
     public static function retrieve($id, $opts = null)
     {
         return self::_retrieve($id, $opts);
+    }
+
+    /**
+     * @param array|null $params
+     * @param array|string|null $opts
+     *
+     * @return Collection of Sources
+     */
+    public static function all($params = null, $opts = null)
+    {
+        return self::_all($params, $opts);
     }
 
     /**
@@ -74,11 +67,11 @@ class Source extends ApiResource
 
     /**
      * @param array|null $params
-     * @param array|string|null $options
+     * @param array|string|null $opts
      *
-     * @return Source The detached source.
+     * @return Source The deleted source.
      */
-    public function detach($params = null, $options = null)
+    public function delete($params = null, $options = null)
     {
         self::_validateParams($params);
 
@@ -100,8 +93,9 @@ class Source extends ApiResource
             $this->refreshFrom($response, $opts);
             return $this;
         } else {
-            $message = "This source object does not appear to be currently attached "
-               . "to a customer object.";
+            $message = "Source objects cannot be deleted, they can only be "
+               . "detached from customer objects. This source object does not "
+               . "appear to be currently attached to a customer object.";
             throw new Error\Api($message);
         }
     }
@@ -110,35 +104,7 @@ class Source extends ApiResource
      * @param array|null $params
      * @param array|string|null $options
      *
-     * @return Source The detached source.
-     *
-     * @deprecated Use the `detach` method instead.
-     */
-    public function delete($params = null, $options = null)
-    {
-        $this->detach($params, $options);
-    }
-
-    /**
-     * @param array|null $params
-     * @param array|string|null $options
-     *
-     * @return Collection The list of source transactions.
-     */
-    public function sourceTransactions($params = null, $options = null)
-    {
-        $url = $this->instanceUrl() . '/source_transactions';
-        list($response, $opts) = $this->_request('get', $url, $params, $options);
-        $obj = Util\Util::convertToStripeObject($response, $opts);
-        $obj->setLastResponse($response);
-        return $obj;
-    }
-
-    /**
-     * @param array|null $params
-     * @param array|string|null $options
-     *
-     * @return Source The verified source.
+     * @return BankAccount The verified bank account.
      */
     public function verify($params = null, $options = null)
     {

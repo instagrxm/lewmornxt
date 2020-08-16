@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 
 /**
@@ -37,43 +36,3 @@ final class Uuid extends BaseUuid implements UuidInterface
         parent::__construct($fields, $numberConverter, $codec, $timeConverter);
     }
 }
-=======
-<?php
-
-/**
- * This file is part of the ramsey/uuid library
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- *
- * @copyright Copyright (c) Ben Ramsey <ben@benramsey.com>
- * @license http://opensource.org/licenses/MIT MIT
- */
-
-declare(strict_types=1);
-
-namespace Ramsey\Uuid\Nonstandard;
-
-use Ramsey\Uuid\Codec\CodecInterface;
-use Ramsey\Uuid\Converter\NumberConverterInterface;
-use Ramsey\Uuid\Converter\TimeConverterInterface;
-use Ramsey\Uuid\Uuid as BaseUuid;
-use Ramsey\Uuid\UuidInterface;
-
-/**
- * Nonstandard\Uuid is a UUID that doesn't conform to RFC 4122
- *
- * @psalm-immutable
- */
-final class Uuid extends BaseUuid implements UuidInterface
-{
-    public function __construct(
-        Fields $fields,
-        NumberConverterInterface $numberConverter,
-        CodecInterface $codec,
-        TimeConverterInterface $timeConverter
-    ) {
-        parent::__construct($fields, $numberConverter, $codec, $timeConverter);
-    }
-}
->>>>>>> 93406d403370e91633bdbb3849fac6e7ddd3dc5f

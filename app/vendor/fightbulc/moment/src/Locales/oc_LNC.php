@@ -21,7 +21,6 @@ return array(
         "future" => 'dins %s',
         "past"   => 'fa %s',
         "s"      => 'unas segondas',
-        "ss"      => '%d segondas',
         "m"      => 'una minuta',
         "mm"     => '%d minutas',
         "h"      => 'una ora',

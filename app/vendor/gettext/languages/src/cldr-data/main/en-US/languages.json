@@ -3,11 +3,12 @@
     "en-US": {
       "identity": {
         "version": {
-          "_number": "$Revision$",
-          "_cldrVersion": "36"
+          "_number": "$Revision: 12740 $",
+          "_cldrVersion": "30.0.2"
         },
         "language": "en",
-        "territory": "US"
+        "territory": "US",
+        "variant": "POSIX"
       },
       "localeDisplayNames": {
         "languages": {
@@ -99,7 +100,6 @@
           "car": "Carib",
           "cay": "Cayuga",
           "cch": "Atsam",
-          "ccp": "Chakma",
           "ce": "Chechen",
           "ceb": "Cebuano",
           "cgg": "Chiga",
@@ -113,7 +113,6 @@
           "chp": "Chipewyan",
           "chr": "Cherokee",
           "chy": "Cheyenne",
-          "cic": "Chickasaw",
           "ckb": "Central Kurdish",
           "co": "Corsican",
           "cop": "Coptic",
@@ -336,7 +335,6 @@
           "ln": "Lingala",
           "lo": "Lao",
           "lol": "Mongo",
-          "lou": "Louisiana Creole",
           "loz": "Lozi",
           "lrc": "Northern Luri",
           "lt": "Lithuanian",
@@ -385,7 +383,7 @@
           "mt": "Maltese",
           "mua": "Mundang",
           "mul": "Multiple languages",
-          "mus": "Muscogee",
+          "mus": "Creek",
           "mwl": "Mirandese",
           "mwr": "Marwari",
           "mwv": "Mentawai",
@@ -528,7 +526,6 @@
           "sog": "Sogdien",
           "sq": "Albanian",
           "sr": "Serbian",
-          "sr-ME": "Montenegrin",
           "srn": "Sranan Tongo",
           "srr": "Serer",
           "ss": "Swati",
@@ -625,7 +622,6 @@
           "yo": "Yoruba",
           "yrl": "Nheengatu",
           "yue": "Cantonese",
-          "yue-alt-menu": "Chinese, Cantonese",
           "za": "Zhuang",
           "zap": "Zapotec",
           "zbl": "Blissymbols",
@@ -634,11 +630,8 @@
           "zgh": "Standard Moroccan Tamazight",
           "zh": "Chinese",
           "zh-alt-long": "Mandarin Chinese",
-          "zh-alt-menu": "Chinese, Mandarin",
           "zh-Hans": "Simplified Chinese",
-          "zh-Hans-alt-long": "Simplified Mandarin Chinese",
           "zh-Hant": "Traditional Chinese",
-          "zh-Hant-alt-long": "Traditional Mandarin Chinese",
           "zu": "Zulu",
           "zun": "Zuni",
           "zxx": "No linguistic content",

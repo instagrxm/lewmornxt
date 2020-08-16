@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.5/phpunit.xsd"
@@ -17,23 +16,3 @@
         </whitelist>
     </filter>
 </phpunit>
-=======
-<?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.5/phpunit.xsd"
-         bootstrap="./tests/bootstrap.php"
-         cacheResultFile="./build/cache/phpunit.result.cache"
-         colors="true"
-         verbose="true">
-    <testsuites>
-        <testsuite name="ramsey/uuid test suite">
-            <directory>./tests</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
-</phpunit>
->>>>>>> 93406d403370e91633bdbb3849fac6e7ddd3dc5f

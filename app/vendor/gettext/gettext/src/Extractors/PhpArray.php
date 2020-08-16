@@ -19,7 +19,7 @@ class PhpArray extends Extractor implements ExtractorInterface
     public static function fromFile($file, Translations $translations, array $options = [])
     {
         foreach (static::getFiles($file) as $file) {
-            static::fromArray(include($file), $translations);
+            self::fromArray(include($file), $translations);
         }
     }
 

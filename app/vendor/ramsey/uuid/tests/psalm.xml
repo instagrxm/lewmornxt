@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?xml version="1.0"?>
 <psalm xmlns="https://getpsalm.org/schema/config"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,22 +15,3 @@
         <file name="tests/phpstan-bootstrap.php"/>
     </stubs>
 </psalm>
-=======
-<?xml version="1.0"?>
-<psalm xmlns="https://getpsalm.org/schema/config"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="https://getpsalm.org/schema/config ../vendor/vimeo/psalm/config.xsd"
-       totallyTyped="true"
-       cacheDirectory="build/cache/psalm"
-       errorBaseline="tests/psalm-baseline.xml">
-
-    <projectFiles>
-        <directory name="src" />
-        <directory name="tests/static-analysis" />
-    </projectFiles>
-
-    <stubs>
-        <file name="tests/phpstan-bootstrap.php"/>
-    </stubs>
-</psalm>
->>>>>>> 93406d403370e91633bdbb3849fac6e7ddd3dc5f

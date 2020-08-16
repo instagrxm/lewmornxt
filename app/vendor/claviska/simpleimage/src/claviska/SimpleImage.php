@@ -30,7 +30,7 @@ class SimpleImage {
     ERR_WEBP_NOT_ENABLED = 10,
     ERR_WRITE = 11;
 
-  protected $image, $mimeType, $exif;
+  private $image, $mimeType, $exif;
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
   // Magic methods
@@ -154,14 +154,9 @@ class SimpleImage {
     case 'image/webp':
       $this->image = imagecreatefromwebp($file);
       break;
-    case 'image/bmp':
-    case 'image/x-ms-bmp':
-    case 'image/x-windows-bmp':
-      $this->image = imagecreatefrombmp($file);
-      break;
     }
     if(!$this->image) {
-      throw new \Exception("Unsupported format: " . $this->mimeType, self::ERR_UNSUPPORTED_FORMAT);
+      throw new \Exception("Unsupported image: $file", self::ERR_UNSUPPORTED_FORMAT);
     }
 
     // Convert pallete images to true color images
@@ -222,7 +217,7 @@ class SimpleImage {
   //
   // Returns an array containing the image data and mime type.
   //
-  protected function generate($mimeType = null, $quality = 100) {
+  private function generate($mimeType = null, $quality = 100) {
     // Format defaults to the original mime type
     $mimeType = $mimeType ?: $this->mimeType;
 
@@ -258,12 +253,6 @@ class SimpleImage {
       imagesavealpha($this->image, true);
       imagewebp($this->image, null, $quality);
       break;
-    case 'image/bmp':
-    case 'image/x-ms-bmp':
-    case 'image/x-windows-bmp':
-      imageinterlace($this->image, true);
-      imagebmp($this->image, null, $quality);
-    break;
     default:
       throw new \Exception('Unsupported format: ' . $mimeType, self::ERR_UNSUPPORTED_FORMAT);
     }
@@ -383,7 +372,7 @@ class SimpleImage {
   //
   // Returns an int|float value.
   //
-  protected static function keepWithin($value, $min, $max) {
+  private static function keepWithin($value, $min, $max) {
     if($value < $min) return $min;
     if($value > $max) return $max;
     return $value;
@@ -440,15 +429,6 @@ class SimpleImage {
   }
 
   //
-  // Gets the resolution of the image
-  //
-  // Returns the resolution as an array of integers: [96, 96]
-  //
-  public function getResolution() {
-    return imageresolution($this->image);
-  }
-
-  //
   // Gets the image's current width.
   //
   // Returns the width as an integer.
@@ -464,7 +444,7 @@ class SimpleImage {
   //
   // Same as PHP's imagecopymerge, but works with transparent images. Used internally for overlay.
   //
-  protected static function imageCopyMergeAlpha($dstIm, $srcIm, $dstX, $dstY, $srcX, $srcY, $srcW, $srcH, $pct) {
+  private static function imageCopyMergeAlpha($dstIm, $srcIm, $dstX, $dstY, $srcX, $srcY, $srcW, $srcH, $pct) {
     // Are we merging with transparency?
     if($pct < 100) {
       // Disable alpha blending and "colorize" the image using a transparent color
@@ -822,24 +802,6 @@ class SimpleImage {
   }
 
   //
-  // Sets an image's resolution, as per https://www.php.net/manual/en/function.imageresolution.php
-  //
-  // $res_x* (int) - The horizontal resolution in DPI
-  // $res_y  (int) - The vertical resolution in DPI
-  //
-  // Returns a SimpleImage object.
-  //
-  public function resolution($res_x, $res_y = null) {
-    if(is_null($res_y)) {
-      imageresolution($this->image, $res_x);
-    } else {
-      imageresolution($this->image, $res_x, $res_y);
-    }
-
-    return $this;
-  }
-
-  //
   // Rotates the image.
   //
   // $angle* (int) - The angle of rotation (-360 - 360).
@@ -857,7 +819,6 @@ class SimpleImage {
       -(self::keepWithin($angle, -360, 360)),
       $backgroundColor
     );
-    imagecolortransparent($this->image, imagecolorallocatealpha($this->image, 0, 0, 0, 127));
 
     return $this;
   }
@@ -1496,7 +1457,7 @@ class SimpleImage {
     self::imageCopyMergeAlpha(
       $newImage->image,
       $this->image,
-      0, 0,
+      $x, $y,
       0, 0,
       $this->getWidth(),
       $this->getHeight(),
@@ -1534,18 +1495,13 @@ class SimpleImage {
   //
   // Sharpens the image.
   //
-  //  $amount (int) - Sharpening amount (default 50)
-  //
   // Returns a SimpleImage object.
   //
-  public function sharpen($amount = 50) {
-    // Normalize amount
-    $amount = max(1, min(100, $amount)) / 100;
-
+  public function sharpen() {
     $sharpen = [
-      [-1, -1, -1],
-      [-1,  8 / $amount, -1],
-      [-1, -1, -1],
+      [0, -1, 0],
+      [-1, 5, -1],
+      [0, -1, 0]
     ];
     $divisor = array_sum(array_map('array_sum', $sharpen));
 
@@ -1577,7 +1533,7 @@ class SimpleImage {
   //
   // Returns a color identifier.
   //
-  protected function allocateColor($color) {
+  private function allocateColor($color) {
     $color = self::normalizeColor($color);
 
     // Was this color already allocated?

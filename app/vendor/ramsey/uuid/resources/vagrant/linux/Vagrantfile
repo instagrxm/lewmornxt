@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
@@ -26,32 +25,3 @@ Vagrant.configure("2") do |config|
     v.name = "ramsey-uuid-linux"
   end
 end
-=======
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
-$script = <<-SCRIPT
-apt-get update
-apt-get install -y \
-  composer \
-  php-bcmath \
-  php-cli \
-  php-gmp \
-  php-json \
-  php-uuid \
-  php-xdebug \
-  php-xml \
-  php-zip \
-  unzip
-SCRIPT
-
-Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/eoan64"
-  config.vm.provision "shell", inline: $script
-  config.vm.synced_folder "../../../", "/home/vagrant/uuid", type: "rsync"
-
-  config.vm.provider "virtualbox" do |v|
-    v.name = "ramsey-uuid-linux"
-  end
-end
->>>>>>> 93406d403370e91633bdbb3849fac6e7ddd3dc5f

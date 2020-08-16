@@ -5,7 +5,7 @@ namespace Gettext;
 /**
  * Static class with merge contants.
  */
-final class Merge
+class Merge
 {
     const ADD = 1;
     const REMOVE = 2;
@@ -34,7 +34,7 @@ final class Merge
 
     /**
      * Merge the flags of two translations.
-     *
+     * 
      * @param Translation $from
      * @param Translation $to
      * @param int         $options
@@ -54,7 +54,7 @@ final class Merge
 
     /**
      * Merge the extracted comments of two translations.
-     *
+     * 
      * @param Translation $from
      * @param Translation $to
      * @param int         $options
@@ -74,7 +74,7 @@ final class Merge
 
     /**
      * Merge the comments of two translations.
-     *
+     * 
      * @param Translation $from
      * @param Translation $to
      * @param int         $options
@@ -94,7 +94,7 @@ final class Merge
 
     /**
      * Merge the references of two translations.
-     *
+     * 
      * @param Translation $from
      * @param Translation $to
      * @param int         $options
@@ -114,7 +114,7 @@ final class Merge
 
     /**
      * Merge the translations of two translations.
-     *
+     * 
      * @param Translation $from
      * @param Translation $to
      * @param int         $options
@@ -138,7 +138,7 @@ final class Merge
 
     /**
      * Merge the translations of two translations.
-     *
+     * 
      * @param Translations $from
      * @param Translations $to
      * @param int          $options
@@ -159,16 +159,16 @@ final class Merge
 
         foreach ($from as $entry) {
             if (($existing = $to->find($entry))) {
-                $existing->mergeWith($entry, $options);
+                $existing->mergeWith($entry);
             } elseif ($options & self::ADD) {
-                $to[] = $entry->getClone();
+                $to[] = $entry;
             }
         }
     }
 
     /**
      * Merge the headers of two translations.
-     *
+     * 
      * @param Translations $from
      * @param Translations $to
      * @param int          $options
