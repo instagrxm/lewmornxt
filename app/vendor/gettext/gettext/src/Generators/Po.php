@@ -6,11 +6,17 @@ use Gettext\Translations;
 
 class Po extends Generator implements GeneratorInterface
 {
+    public static $options = [
+        'noLocation' => false,
+    ];
+
     /**
      * {@parentDoc}.
      */
     public static function toString(Translations $translations, array $options = [])
     {
+        $options += static::$options;
+
         $pluralForm = $translations->getPluralForms();
         $pluralSize = is_array($pluralForm) ? ($pluralForm[0] - 1) : null;
         $lines = ['msgid ""', 'msgstr ""'];
@@ -35,9 +41,9 @@ class Po extends Generator implements GeneratorInterface
                 }
             }
 
-            if ($translation->hasReferences()) {
+            if (!$options['noLocation'] && $translation->hasReferences()) {
                 foreach ($translation->getReferences() as $reference) {
-                    //$lines[] = '#: '.$reference[0].(!is_null($reference[1]) ? ':'.$reference[1] : null);
+                    $lines[] = '#: '.$reference[0].(!is_null($reference[1]) ? ':'.$reference[1] : null);
                 }
             }
 
@@ -45,21 +51,23 @@ class Po extends Generator implements GeneratorInterface
                 $lines[] = '#, '.implode(',', $translation->getFlags());
             }
 
+            $prefix = $translation->isDisabled() ? '#~ ' : '';
+
             if ($translation->hasContext()) {
-                $lines[] = 'msgctxt '.self::convertString($translation->getContext());
+                $lines[] = $prefix.'msgctxt '.static::convertString($translation->getContext());
             }
 
-            self::addLines($lines, 'msgid', $translation->getOriginal());
+            static::addLines($lines, $prefix.'msgid', $translation->getOriginal());
 
             if ($translation->hasPlural()) {
-                self::addLines($lines, 'msgid_plural', $translation->getPlural());
-                self::addLines($lines, 'msgstr[0]', $translation->getTranslation());
+                static::addLines($lines, $prefix.'msgid_plural', $translation->getPlural());
+                static::addLines($lines, $prefix.'msgstr[0]', $translation->getTranslation());
 
                 foreach ($translation->getPluralTranslations($pluralSize) as $k => $v) {
-                    self::addLines($lines, 'msgstr['.($k + 1).']', $v);
+                    static::addLines($lines, $prefix.'msgstr['.($k + 1).']', $v);
                 }
             } else {
-                self::addLines($lines, 'msgstr', $translation->getTranslation());
+                static::addLines($lines, $prefix.'msgstr', $translation->getTranslation());
             }
 
             $lines[] = '';
@@ -75,16 +83,16 @@ class Po extends Generator implements GeneratorInterface
      *
      * @return string
      */
-    private static function multilineQuote($string)
+    protected static function multilineQuote($string)
     {
         $lines = explode("\n", $string);
         $last = count($lines) - 1;
 
         foreach ($lines as $k => $line) {
             if ($k === $last) {
-                $lines[$k] = self::convertString($line);
+                $lines[$k] = static::convertString($line);
             } else {
-                $lines[$k] = self::convertString($line."\n");
+                $lines[$k] = static::convertString($line."\n");
             }
         }
 
@@ -98,9 +106,9 @@ class Po extends Generator implements GeneratorInterface
      * @param string $name
      * @param string $value
      */
-    private static function addLines(array &$lines, $name, $value)
+    protected static function addLines(array &$lines, $name, $value)
     {
-        $newLines = self::multilineQuote($value);
+        $newLines = static::multilineQuote($value);
 
         if (count($newLines) === 1) {
             $lines[] = $name.' '.$newLines[0];
@@ -128,6 +136,7 @@ class Po extends Generator implements GeneratorInterface
                 "\x00" => '',
                 '\\' => '\\\\',
                 "\t" => '\t',
+                "\r" => '\r',
                 "\n" => '\n',
                 '"' => '\\"',
             ]

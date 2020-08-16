@@ -9,89 +9,93 @@ use ArrayObject;
 
 /**
  * Class to manage a collection of translations.
- * 
- * @method static fromBladeFile(string $filename, array $options = [])
- * @method static fromBladeString(string $string, array $options = [])
- * @method addFromBladeFile(string $filename, array $options = [])
- * @method addFromBladeString(string $string, array $options = [])
- * @method static fromCsvFile(string $filename, array $options = [])
- * @method static fromCsvString(string $string, array $options = [])
- * @method addFromCsvFile(string $filename, array $options = [])
- * @method addFromCsvString(string $string, array $options = [])
- * @method toCsvFile(string $filename, array $options = [])
- * @method toCsvString(array $options = [])
- * @method static fromCsvDictionaryFile(string $filename, array $options = [])
- * @method static fromCsvDictionaryString(string $string, array $options = [])
- * @method addFromCsvDictionaryFile(string $filename, array $options = [])
- * @method addFromCsvDictionaryString(string $string, array $options = [])
- * @method toCsvDictionaryFile(string $filename, array $options = [])
- * @method toCsvDictionaryString(array $options = [])
- * @method static fromJedFile(string $filename, array $options = [])
- * @method static fromJedString(string $string, array $options = [])
- * @method addFromJedFile(string $filename, array $options = [])
- * @method addFromJedString(string $string, array $options = [])
- * @method toJedFile(string $filename, array $options = [])
- * @method toJedString(array $options = [])
- * @method static fromJsCodeFile(string $filename, array $options = [])
- * @method static fromJsCodeString(string $string, array $options = [])
- * @method addFromJsCodeFile(string $filename, array $options = [])
- * @method addFromJsCodeString(string $string, array $options = [])
- * @method static fromJsonFile(string $filename, array $options = [])
- * @method static fromJsonString(string $string, array $options = [])
- * @method addFromJsonFile(string $filename, array $options = [])
- * @method addFromJsonString(string $string, array $options = [])
- * @method toJsonFile(string $filename, array $options = [])
- * @method toJsonString(array $options = [])
- * @method static fromJsonDictionaryFile(string $filename, array $options = [])
- * @method static fromJsonDictionaryString(string $string, array $options = [])
- * @method addFromJsonDictionaryFile(string $filename, array $options = [])
- * @method addFromJsonDictionaryString(string $string, array $options = [])
- * @method toJsonDictionaryFile(string $filename, array $options = [])
- * @method toJsonDictionaryString(array $options = [])
- * @method static fromMoFile(string $filename, array $options = [])
- * @method static fromMoString(string $string, array $options = [])
- * @method addFromMoFile(string $filename, array $options = [])
- * @method addFromMoString(string $string, array $options = [])
- * @method toMoFile(string $filename, array $options = [])
- * @method toMoString(array $options = [])
- * @method static fromPhpArrayFile(string $filename, array $options = [])
- * @method static fromPhpArrayString(string $string, array $options = [])
- * @method addFromPhpArrayFile(string $filename, array $options = [])
- * @method addFromPhpArrayString(string $string, array $options = [])
- * @method toPhpArrayFile(string $filename, array $options = [])
- * @method toPhpArrayString(array $options = [])
- * @method static fromPhpCodeFile(string $filename, array $options = [])
- * @method static fromPhpCodeString(string $string, array $options = [])
- * @method addFromPhpCodeFile(string $filename, array $options = [])
- * @method addFromPhpCodeString(string $string, array $options = [])
- * @method static fromPoFile(string $filename, array $options = [])
- * @method static fromPoString(string $string, array $options = [])
- * @method addFromPoFile(string $filename, array $options = [])
- * @method addFromPoString(string $string, array $options = [])
- * @method toPoFile(string $filename, array $options = [])
- * @method toPoString(array $options = [])
- * @method static fromTwigFile(string $filename, array $options = [])
- * @method static fromTwigString(string $string, array $options = [])
- * @method addFromTwigFile(string $filename, array $options = [])
- * @method addFromTwigString(string $string, array $options = [])
- * @method static fromXliffFile(string $filename, array $options = [])
- * @method static fromXliffString(string $string, array $options = [])
- * @method addFromXliffFile(string $filename, array $options = [])
- * @method addFromXliffString(string $string, array $options = [])
- * @method toXliffFile(string $filename, array $options = [])
- * @method toXliffString(array $options = [])
- * @method static fromYamlFile(string $filename, array $options = [])
- * @method static fromYamlString(string $string, array $options = [])
- * @method addFromYamlFile(string $filename, array $options = [])
- * @method addFromYamlString(string $string, array $options = [])
- * @method toYamlFile(string $filename, array $options = [])
- * @method toYamlString(array $options = [])
- * @method static fromYamlDictionaryFile(string $filename, array $options = [])
- * @method static fromYamlDictionaryString(string $string, array $options = [])
- * @method addFromYamlDictionaryFile(string $filename, array $options = [])
- * @method addFromYamlDictionaryString(string $string, array $options = [])
- * @method toYamlDictionaryFile(string $filename, array $options = [])
- * @method toYamlDictionaryString(array $options = [])
+ *
+ * @method static $this fromBladeFile(string $filename, array $options = [])
+ * @method static $this fromBladeString(string $string, array $options = [])
+ * @method $this addFromBladeFile(string $filename, array $options = [])
+ * @method $this addFromBladeString(string $string, array $options = [])
+ * @method static $this fromCsvFile(string $filename, array $options = [])
+ * @method static $this fromCsvString(string $string, array $options = [])
+ * @method $this addFromCsvFile(string $filename, array $options = [])
+ * @method $this addFromCsvString(string $string, array $options = [])
+ * @method bool toCsvFile(string $filename, array $options = [])
+ * @method string toCsvString(array $options = [])
+ * @method static $this fromCsvDictionaryFile(string $filename, array $options = [])
+ * @method static $this fromCsvDictionaryString(string $string, array $options = [])
+ * @method $this addFromCsvDictionaryFile(string $filename, array $options = [])
+ * @method $this addFromCsvDictionaryString(string $string, array $options = [])
+ * @method bool toCsvDictionaryFile(string $filename, array $options = [])
+ * @method string toCsvDictionaryString(array $options = [])
+ * @method static $this fromJedFile(string $filename, array $options = [])
+ * @method static $this fromJedString(string $string, array $options = [])
+ * @method $this addFromJedFile(string $filename, array $options = [])
+ * @method $this addFromJedString(string $string, array $options = [])
+ * @method bool toJedFile(string $filename, array $options = [])
+ * @method string toJedString(array $options = [])
+ * @method static $this fromJsCodeFile(string $filename, array $options = [])
+ * @method static $this fromJsCodeString(string $string, array $options = [])
+ * @method $this addFromJsCodeFile(string $filename, array $options = [])
+ * @method $this addFromJsCodeString(string $string, array $options = [])
+ * @method static $this fromJsonFile(string $filename, array $options = [])
+ * @method static $this fromJsonString(string $string, array $options = [])
+ * @method $this addFromJsonFile(string $filename, array $options = [])
+ * @method $this addFromJsonString(string $string, array $options = [])
+ * @method bool toJsonFile(string $filename, array $options = [])
+ * @method string toJsonString(array $options = [])
+ * @method static $this fromJsonDictionaryFile(string $filename, array $options = [])
+ * @method static $this fromJsonDictionaryString(string $string, array $options = [])
+ * @method $this addFromJsonDictionaryFile(string $filename, array $options = [])
+ * @method $this addFromJsonDictionaryString(string $string, array $options = [])
+ * @method bool toJsonDictionaryFile(string $filename, array $options = [])
+ * @method string toJsonDictionaryString(array $options = [])
+ * @method static $this fromMoFile(string $filename, array $options = [])
+ * @method static $this fromMoString(string $string, array $options = [])
+ * @method $this addFromMoFile(string $filename, array $options = [])
+ * @method $this addFromMoString(string $string, array $options = [])
+ * @method bool toMoFile(string $filename, array $options = [])
+ * @method string toMoString(array $options = [])
+ * @method static $this fromPhpArrayFile(string $filename, array $options = [])
+ * @method static $this fromPhpArrayString(string $string, array $options = [])
+ * @method $this addFromPhpArrayFile(string $filename, array $options = [])
+ * @method $this addFromPhpArrayString(string $string, array $options = [])
+ * @method bool toPhpArrayFile(string $filename, array $options = [])
+ * @method string toPhpArrayString(array $options = [])
+ * @method static $this fromPhpCodeFile(string $filename, array $options = [])
+ * @method static $this fromPhpCodeString(string $string, array $options = [])
+ * @method $this addFromPhpCodeFile(string $filename, array $options = [])
+ * @method $this addFromPhpCodeString(string $string, array $options = [])
+ * @method static $this fromPoFile(string $filename, array $options = [])
+ * @method static $this fromPoString(string $string, array $options = [])
+ * @method $this addFromPoFile(string $filename, array $options = [])
+ * @method $this addFromPoString(string $string, array $options = [])
+ * @method bool toPoFile(string $filename, array $options = [])
+ * @method string toPoString(array $options = [])
+ * @method static $this fromTwigFile(string $filename, array $options = [])
+ * @method static $this fromTwigString(string $string, array $options = [])
+ * @method $this addFromTwigFile(string $filename, array $options = [])
+ * @method $this addFromTwigString(string $string, array $options = [])
+ * @method static $this fromVueJsFile(string $filename, array $options = [])
+ * @method static $this fromVueJsString(string $filename, array $options = [])
+ * @method $this addFromVueJsFile(string $filename, array $options = [])
+ * @method $this addFromVueJsString(string $filename, array $options = [])
+ * @method static $this fromXliffFile(string $filename, array $options = [])
+ * @method static $this fromXliffString(string $string, array $options = [])
+ * @method $this addFromXliffFile(string $filename, array $options = [])
+ * @method $this addFromXliffString(string $string, array $options = [])
+ * @method bool toXliffFile(string $filename, array $options = [])
+ * @method string toXliffString(array $options = [])
+ * @method static $this fromYamlFile(string $filename, array $options = [])
+ * @method static $this fromYamlString(string $string, array $options = [])
+ * @method $this addFromYamlFile(string $filename, array $options = [])
+ * @method $this addFromYamlString(string $string, array $options = [])
+ * @method bool toYamlFile(string $filename, array $options = [])
+ * @method string toYamlString(array $options = [])
+ * @method static $this fromYamlDictionaryFile(string $filename, array $options = [])
+ * @method static $this fromYamlDictionaryString(string $string, array $options = [])
+ * @method $this addFromYamlDictionaryFile(string $filename, array $options = [])
+ * @method $this addFromYamlDictionaryString(string $string, array $options = [])
+ * @method bool toYamlDictionaryFile(string $filename, array $options = [])
+ * @method string toYamlDictionaryString(array $options = [])
  */
 class Translations extends ArrayObject
 {
@@ -116,13 +120,19 @@ class Translations extends ArrayObject
         ],
     ];
 
-    private $headers;
+    protected $headers;
+
+    protected $translationClass;
 
     /**
      * @see ArrayObject::__construct()
      */
-    public function __construct($input = [], $flags = 0, $iterator_class = 'ArrayIterator')
-    {
+    public function __construct(
+        $input = [],
+        $flags = 0,
+        $iterator_class = 'ArrayIterator',
+        $translationClass = 'Gettext\Translation'
+    ) {
         $this->headers = static::$options['defaultHeaders'];
 
         foreach (static::$options['defaultDateHeaders'] as $header) {
@@ -130,6 +140,8 @@ class Translations extends ArrayObject
         }
 
         $this->headers[self::HEADER_LANGUAGE] = '';
+
+        $this->translationClass = $translationClass;
 
         parent::__construct($input, $flags, $iterator_class);
     }
@@ -206,7 +218,9 @@ class Translations extends ArrayObject
     public function offsetSet($index, $value)
     {
         if (!($value instanceof Translation)) {
-            throw new InvalidArgumentException('Only instances of Gettext\\Translation must be added to a Gettext\\Translations');
+            throw new InvalidArgumentException(
+                'Only instances of Gettext\\Translation must be added to a Gettext\\Translations'
+            );
         }
 
         $id = $value->getId();
@@ -227,11 +241,14 @@ class Translations extends ArrayObject
      *
      * @param int    $count
      * @param string $rule
-     * 
+     *
      * @return self
      */
     public function setPluralForms($count, $rule)
     {
+        if (preg_match('/[a-z]/i', str_replace('n', '', $rule))) {
+            throw new \InvalidArgumentException('Invalid Plural form: ' . $rule);
+        }
         $this->setHeader(self::HEADER_PLURAL, "nplurals={$count}; plural={$rule};");
 
         return $this;
@@ -246,7 +263,9 @@ class Translations extends ArrayObject
     {
         $header = $this->getHeader(self::HEADER_PLURAL);
 
-        if (!empty($header) && preg_match('/^nplurals\s*=\s*(\d+)\s*;\s*plural\s*=\s*([^;]+)\s*;$/', $header, $matches)) {
+        if (!empty($header)
+            && preg_match('/^nplurals\s*=\s*(\d+)\s*;\s*plural\s*=\s*([^;]+)\s*;$/', $header, $matches)
+        ) {
             return [intval($matches[1]), $matches[2]];
         }
     }
@@ -256,7 +275,7 @@ class Translations extends ArrayObject
      *
      * @param string $name
      * @param string $value
-     * 
+     *
      * @return self
      */
     public function setHeader($name, $value)
@@ -295,7 +314,7 @@ class Translations extends ArrayObject
 
     /**
      * Removes all headers.
-     * 
+     *
      * @return self
      */
     public function deleteHeaders()
@@ -309,7 +328,7 @@ class Translations extends ArrayObject
      * Removes one header.
      *
      * @param string $name
-     * 
+     *
      * @return self
      */
     public function deleteHeader($name)
@@ -333,7 +352,7 @@ class Translations extends ArrayObject
      * Sets the language and the plural forms.
      *
      * @param string $language
-     * 
+     *
      * @throws InvalidArgumentException if the language hasn't been recognized
      *
      * @return self
@@ -365,7 +384,7 @@ class Translations extends ArrayObject
      * Set a new domain for this translations.
      *
      * @param string $domain
-     * 
+     *
      * @return self
      */
     public function setDomain($domain)
@@ -402,6 +421,7 @@ class Translations extends ArrayObject
      *
      * @param string|Translation $context  The context of the translation or a translation instance
      * @param string             $original The original string
+     * @warning Translations with custom identifiers (e.g. XLIFF unit IDs) cannot be found using this function.
      *
      * @return Translation|false
      */
@@ -418,17 +438,18 @@ class Translations extends ArrayObject
 
     /**
      * Count all elements translated
-     * 
+     *
      * @return integer
      */
     public function countTranslated()
     {
-        $callback = function(Translation $v)
-        {
-            return ($v->hasTranslation()) ? $v->getTranslation() : null;
-        };
-
-        return count(array_filter(get_object_vars($this), $callback));
+        $c = 0;
+        foreach ($this as $v) {
+            if ($v->hasTranslation()) {
+                $c++;
+            }
+        }
+        return $c;
     }
 
     /**
@@ -442,7 +463,7 @@ class Translations extends ArrayObject
      */
     public function insert($context, $original, $plural = '')
     {
-        return $this->offsetSet(null, new Translation($context, $original, $plural));
+        return $this->offsetSet(null, $this->createNewTranslation($context, $original, $plural));
     }
 
     /**
@@ -450,7 +471,7 @@ class Translations extends ArrayObject
      *
      * @param Translations $translations The translations instance to merge with
      * @param int          $options
-     * 
+     *
      * @return self
      */
     public function mergeWith(Translations $translations, $options = Merge::DEFAULTS)
@@ -459,5 +480,19 @@ class Translations extends ArrayObject
         Merge::mergeTranslations($translations, $this, $options);
 
         return $this;
+    }
+
+    /**
+     * Create a new instance of a Translation object.
+     *
+     * @param string $context  The context of the translation
+     * @param string $original The original string
+     * @param string $plural   The original plural string
+     * @return Translation New Translation instance
+     */
+    public function createNewTranslation($context, $original, $plural = '')
+    {
+        $class = $this->translationClass;
+        return $class::create($context, $original, $plural);
     }
 }

@@ -6,25 +6,27 @@ use Gettext\Generators\PhpArray;
 
 class Translator extends BaseTranslator implements TranslatorInterface
 {
-    private $domain;
-    private $dictionary = [];
-    private $plurals = [];
+    protected $domain;
+    protected $dictionary = [];
+    protected $plurals = [];
 
     /**
      * Loads translation from a Translations instance, a file on an array.
      *
      * @param Translations|string|array $translations
      *
-     * @return self
+     * @return static
      */
     public function loadTranslations($translations)
     {
         if (is_object($translations) && $translations instanceof Translations) {
-            $translations = PhpArray::generate($translations);
+            $translations = PhpArray::generate($translations, ['includeHeaders' => false]);
         } elseif (is_string($translations) && is_file($translations)) {
             $translations = include $translations;
         } elseif (!is_array($translations)) {
-            throw new \InvalidArgumentException('Invalid Translator: only arrays, files or instance of Translations are allowed');
+            throw new \InvalidArgumentException(
+                'Invalid Translator: only arrays, files or instance of Translations are allowed'
+            );
         }
 
         $this->addTranslations($translations);
@@ -34,10 +36,10 @@ class Translator extends BaseTranslator implements TranslatorInterface
 
     /**
      * Set the default domain.
-     * 
+     *
      * @param string $domain
-     * 
-     * @return self
+     *
+     * @return static
      */
     public function defaultDomain($domain)
     {
@@ -129,8 +131,8 @@ class Translator extends BaseTranslator implements TranslatorInterface
      */
     public function dnpgettext($domain, $context, $original, $plural, $value)
     {
-        $key = $this->getPluralIndex($domain, $value);
         $translation = $this->getTranslation($domain, $context, $original);
+        $key = $this->getPluralIndex($domain, $value, $translation === false);
 
         if (isset($translation[$key]) && $translation[$key] !== '') {
             return $translation[$key];
@@ -184,7 +186,9 @@ class Translator extends BaseTranslator implements TranslatorInterface
      */
     protected function getTranslation($domain, $context, $original)
     {
-        return isset($this->dictionary[$domain][$context][$original]) ? $this->dictionary[$domain][$context][$original] : false;
+        return isset($this->dictionary[$domain][$context][$original])
+             ? $this->dictionary[$domain][$context][$original]
+             : false;
     }
 
     /**
@@ -193,24 +197,20 @@ class Translator extends BaseTranslator implements TranslatorInterface
      *
      * @param string $domain
      * @param string $n
+     * @param bool   $fallback set to true to get fallback plural index
      *
      * @return int
      */
-    protected function getPluralIndex($domain, $n)
+    protected function getPluralIndex($domain, $n, $fallback)
     {
-        //Not loaded domain, use a fallback
-        if (!isset($this->plurals[$domain])) {
+        //Not loaded domain or translation, use a fallback
+        if (!isset($this->plurals[$domain]) || $fallback === true) {
             return $n == 1 ? 0 : 1;
         }
 
         if (!isset($this->plurals[$domain]['function'])) {
-            $code = self::fixTerseIfs($this->plurals[$domain]['code']);
-            $func = @eval("return function (\$n) { $code };");
-            if (!$func) {
-                $func = function() {};
-            }
-
-            $this->plurals[$domain]['function'] = $func;
+            $code = static::fixTerseIfs($this->plurals[$domain]['code']);
+            $this->plurals[$domain]['function'] = eval("return function (\$n) { $code };");
         }
 
         if ($this->plurals[$domain]['count'] <= 2) {
@@ -257,7 +257,7 @@ class Translator extends BaseTranslator implements TranslatorInterface
         $failure = $matches['failure'];
 
         // Go look for another terse if in the failure state.
-        $failure = self::fixTerseIfs($failure, true);
+        $failure = static::fixTerseIfs($failure, true);
         $code = $expression.' ? '.$success.' : '.$failure;
 
         if ($inner) {

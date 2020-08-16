@@ -14,21 +14,25 @@ trait DictionaryTrait
 
     /**
      * Returns a plain dictionary with the format [original => translation].
-     * 
+     *
      * @param Translations $translations
      * @param bool         $includeHeaders
      *
      * @return array
      */
-    private static function toArray(Translations $translations, $includeHeaders)
+    protected static function toArray(Translations $translations, $includeHeaders)
     {
         $messages = [];
 
         if ($includeHeaders) {
-            $messages[''] = self::generateHeaders($translations);
+            $messages[''] = static::generateHeaders($translations);
         }
 
         foreach ($translations as $translation) {
+            if ($translation->isDisabled()) {
+                continue;
+            }
+
             $messages[$translation->getOriginal()] = $translation->getTranslation();
         }
 
@@ -37,15 +41,15 @@ trait DictionaryTrait
 
     /**
      * Extract the entries from a dictionary.
-     * 
+     *
      * @param array        $messages
      * @param Translations $translations
      */
-    private static function fromArray(array $messages, Translations $translations)
+    protected static function fromArray(array $messages, Translations $translations)
     {
         foreach ($messages as $original => $translation) {
             if ($original === '') {
-                self::extractHeaders($translation, $translations);
+                static::extractHeaders($translation, $translations);
                 continue;
             }
 

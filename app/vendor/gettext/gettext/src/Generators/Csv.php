@@ -4,6 +4,7 @@ namespace Gettext\Generators;
 
 use Gettext\Translations;
 use Gettext\Utils\HeadersGeneratorTrait;
+use Gettext\Utils\CsvTrait;
 
 /**
  * Class to export translations to csv.
@@ -11,9 +12,13 @@ use Gettext\Utils\HeadersGeneratorTrait;
 class Csv extends Generator implements GeneratorInterface
 {
     use HeadersGeneratorTrait;
+    use CsvTrait;
 
     public static $options = [
         'includeHeaders' => false,
+        'delimiter' => ",",
+        'enclosure' => '"',
+        'escape_char' => "\\"
     ];
 
     /**
@@ -25,17 +30,21 @@ class Csv extends Generator implements GeneratorInterface
         $handle = fopen('php://memory', 'w');
 
         if ($options['includeHeaders']) {
-            fputcsv($handle, ['', '', self::generateHeaders($translations)]);
+            static::fputcsv($handle, ['', '', static::generateHeaders($translations)], $options);
         }
 
         foreach ($translations as $translation) {
+            if ($translation->isDisabled()) {
+                continue;
+            }
+
             $line = [$translation->getContext(), $translation->getOriginal(), $translation->getTranslation()];
 
             if ($translation->hasPluralTranslations(true)) {
                 $line = array_merge($line, $translation->getPluralTranslations());
             }
 
-            fputcsv($handle, $line);
+            static::fputcsv($handle, $line, $options);
         }
 
         rewind($handle);

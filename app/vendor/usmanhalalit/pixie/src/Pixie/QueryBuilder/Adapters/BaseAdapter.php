@@ -65,8 +65,8 @@ abstract class BaseAdapter
         }
 
         // Limit and offset
-        $limit = isset($statements['limit']) ? 'LIMIT ' . $statements['limit'] : '';
-        $offset = isset($statements['offset']) ? 'OFFSET ' . $statements['offset'] : '';
+        $limit = isset($statements['limit']) ? 'LIMIT ' . (int) $statements['limit'] : '';
+        $offset = isset($statements['offset']) ? 'OFFSET ' . (int) $statements['offset'] : '';
 
         // Having
         list($havingCriteria, $havingBindings) = $this->buildCriteriaWithType($statements, 'havings', 'HAVING');
@@ -164,7 +164,7 @@ abstract class BaseAdapter
             $bindings = array_merge($bindings, $updateBindings);
         }
 
-        $sql = $this->concatenateQuery($sqlArray, ' ', false);
+        $sql = $this->concatenateQuery($sqlArray);
 
         return compact('sql', 'bindings');
     }
@@ -272,7 +272,7 @@ abstract class BaseAdapter
             $limit
         );
 
-        $sql = $this->concatenateQuery($sqlArray, ' ', false);
+        $sql = $this->concatenateQuery($sqlArray);
 
         $bindings = array_merge($bindings, $whereBindings);
         return compact('sql', 'bindings');
@@ -301,7 +301,7 @@ abstract class BaseAdapter
         $limit = isset($statements['limit']) ? 'LIMIT ' . $statements['limit'] : '';
 
         $sqlArray = array('DELETE FROM', $this->wrapSanitizer($table), $whereCriteria);
-        $sql = $this->concatenateQuery($sqlArray, ' ', false);
+        $sql = $this->concatenateQuery($sqlArray);
         $bindings = $whereBindings;
 
         return compact('sql', 'bindings');
