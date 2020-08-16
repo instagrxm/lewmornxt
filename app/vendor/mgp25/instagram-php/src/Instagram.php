@@ -3,10 +3,10 @@
 namespace InstagramAPI;
 
 /**
- * Nextpost Private API for Instagram v.1.0.39 (customized)
+ * Nextpost Private API for Instagram v.1.0 with iOS emulation (customized)
  * 
  * @version NEXTPOST
- * Last update: 4.08.2020
+ * Last update: 10.08.2020
  *
  * Each buyer of Nextpost PHP-script (originally developed by Postcode) 
  * have a license for the script and license for use this library.
@@ -228,6 +228,13 @@ class Instagram implements ExperimentsInterface
     public $radio_type = 'wifi-none';
 
     /**
+     * The platform used for requests.
+     *
+     * @var string
+     */
+    public $platform;
+
+    /**
      * Connection speed.
      *
      * @var string
@@ -336,14 +343,22 @@ class Instagram implements ExperimentsInterface
      * @param bool  $truncatedDebug Truncate long responses in debug.
      * @param array $storageConfig  Configuration for the desired
      *                              user settings storage backend.
+     * @param bool   $platform      The platform to be emulated. 'android' or 'ios'.
      *
      * @throws \InstagramAPI\Exception\InstagramException
      */
     public function __construct(
         $debug = false,
         $truncatedDebug = false,
-        array $storageConfig = [])
+        array $storageConfig = [],
+        $platform = 'android')
     {
+        if ($platform !== 'android' && $platform !== 'ios') {
+            throw new \InvalidArgumentException(sprintf('"%s" is not a valid platform.', $platform));
+        } else {
+            $this->platform = $platform;
+        }
+        
         // Disable incorrect web usage by default. People should never embed
         // this application emulator library directly in a webpage, or they
         // might cause all kinds of damage and data corruption. They should
@@ -607,6 +622,40 @@ class Instagram implements ExperimentsInterface
     }
 
     /**
+     * Get the platform used for requests.
+     *
+     * @return string
+     */
+    public function getPlatform()
+    {
+        return $this->platform;
+    }
+
+    /**
+     * Check if running on Android platform.
+     *
+     * @return string
+     */
+    public function getIsAndroid()
+    {
+        return $this->platform === 'android';
+    }
+
+    /**
+     * Check if using an android session.
+     *
+     * @return bool
+     */
+    public function getIsAndroidSession()
+    {
+        if (strpos($this->settings->get('device_id'), 'android') !== false) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Get the connection speed.
      *
      * @return string
@@ -823,22 +872,27 @@ class Instagram implements ExperimentsInterface
             $this->_sendPreLoginFlow();
 
             try {
-                $response = $this->request('accounts/login/')
+                $request = $this->request('accounts/login/')
                     ->setNeedsAuth(false)
                     ->addPost('jazoest', Utils::generateJazoest($this->phone_id))
-                    ->addPost('country_codes', '[{"country_code":"1","source":["default"]}]')
                     ->addPost('phone_id', $this->phone_id)
                     ->addPost('_csrftoken', $this->client->getToken())
                     ->addPost('username', $this->username)
-                    ->addPost('adid', $this->advertising_id)
-                    ->addPost('guid', $this->uuid)
-                    ->addPost('device_id', $this->device_id)
+                    ->addPost('adid', $this->advertising_id);
+                    if ($this->getPlatform() === 'android') {
+                        $request->addPost('country_codes', '[{"country_code":"1","source":["default"]}]')
+                                ->addPost('guid', $this->uuid)
+                                ->addPost('google_tokens', '[]');
+                    } elseif ($this->getPlatform() === 'ios') {
+                        $request->addPost('req_login', '0');
+                    }
+                    $request->addPost('device_id', $this->device_id)
                     // Removed in the lastest Instagram app version
                     // ->addPost('password', $this->password)
                     ->addPost('enc_password', Utils::encryptPassword($password, $this->settings->get('public_key_id'), $this->settings->get('public_key')))
-                    ->addPost('google_tokens', '[]')
-                    ->addPost('login_attempt_count', '0')
-                    ->getResponse(new Response\LoginResponse());
+                    ->addPost('login_attempt_count', '0');
+
+                    $response = $request->getResponse(new Response\LoginResponse());
             } catch (\InstagramAPI\Exception\InstagramException $e) {
                 if ($e->hasResponse() && $e->getResponse()->isTwoFactorRequired()) {
                     // Login failed because two-factor login is required.
@@ -1024,7 +1078,8 @@ class Instagram implements ExperimentsInterface
         $verificationCode,
         $verificationMethod = '1',
         $appRefreshInterval = 1800,
-        $usernameHandler = null)
+        $usernameHandler = null,
+        $trustDevice = true)
     {
         if (empty($username) || empty($password)) {
             throw new \InvalidArgumentException('You must provide a username and password to finishTwoFactorLogin().');
@@ -1057,7 +1112,7 @@ class Instagram implements ExperimentsInterface
             ->addPost('verification_method', $verificationMethod)
             ->addPost('phone_id', $this->phone_id)
             ->addPost('verification_code', $verificationCode)
-            ->addPost('trust_this_device', 1)
+            ->addPost('trust_this_device', ($trustDevice) ? '1' : '0')
             ->addPost('two_factor_identifier', $twoFactorIdentifier)
             ->addPost('_csrftoken', $this->client->getToken())
             ->addPost('username', $username)
@@ -1365,15 +1420,19 @@ class Instagram implements ExperimentsInterface
         // But if they've got a BAD/none, this will create a brand-new device.
         if ($this->customDeviceString !== null) {
             $savedDeviceString = $this->customDeviceString;
+            $autoFallback = false;
         } else {
             $savedDeviceString = $this->settings->get('devicestring');
+            $autoFallback = true;
         }
 
         $this->device = new Devices\Device(
             Constants::IG_VERSION,
             Constants::VERSION_CODE,
             $this->getLocale(),
-            $savedDeviceString
+            $savedDeviceString,
+            $autoFallback,
+            $this->getPlatform()
         );
 
         // Get active device string so that we can compare it to any saved one.
@@ -1395,10 +1454,15 @@ class Instagram implements ExperimentsInterface
             $this->settings->eraseDeviceSettings();
 
             // Save the chosen device string to settings.
+            if ($this->getPlatform() === 'ios') {
+                $deviceString = 'ios';
+            }
+
+            // Save the chosen device string to settings.
             $this->settings->set('devicestring', $deviceString);
 
             // Generate hardware fingerprints for the new device.
-            $this->settings->set('device_id', Signatures::generateDeviceId());
+            $this->settings->set('device_id', Signatures::generateDeviceId($this->getPlatform()));
             $this->settings->set('phone_id', Signatures::generateUUID(true));
             $this->settings->set('uuid', Signatures::generateUUID(true));
 
@@ -1487,7 +1551,9 @@ class Instagram implements ExperimentsInterface
             Constants::IG_VERSION,
             Constants::VERSION_CODE,
             $this->getLocale(),
-            $savedDeviceString
+            $savedDeviceString,
+            $autoFallback,
+            $this->getPlatform()
         );
 
         // Get active device string so that we can compare it to any saved one.
@@ -1508,10 +1574,15 @@ class Instagram implements ExperimentsInterface
             // Erase all previously stored device-specific settings and cookies.
             $this->settings->eraseDeviceSettings();
 
+            // Save the chosen device string to settings.
+            if ($this->getPlatform() === 'ios') {
+                $deviceString = 'ios';
+            }
+
             $this->settings->set('devicestring', $deviceString);
 
             // Generate hardware fingerprints for the new device.
-            $this->settings->set('device_id', Signatures::generateDeviceId());
+            $this->settings->set('device_id', Signatures::generateDeviceId($this->getPlatform()));
             $this->settings->set('phone_id', Signatures::generateUUID());
             $this->settings->set('uuid', Signatures::generateUUID());
 
@@ -1862,7 +1933,9 @@ class Instagram implements ExperimentsInterface
                 $this->discover->getExploreFeed(null, null, true);
                 $this->internal->getQPFetch();
                 // $this->account->getProcessContactPointSignals();
-                $this->internal->getArlinkDownloadInfo();
+                if ($this->getPlatform() === 'android') {
+                    $this->internal->getArlinkDownloadInfo();
+                }
             } finally {
                 // Stops emulating batch requests
                 $this->client->stopEmulatingBatch();
@@ -1890,8 +1963,9 @@ class Instagram implements ExperimentsInterface
             $isSessionExpired = $lastLoginTime === null || (time() - $lastLoginTime) > $appRefreshInterval;
 
             
-            // Act like a real logged in app client refreshing its news timeline.
-            // This also lets us detect if we're still logged in with a valid session.
+            // Perform the "user has returned to their already-logged in app,
+            // so refresh all feeds to check for news" API flow.
+            
             if ($isSessionExpired) {
                 // Batch Request 1
                 $this->client->startEmulatingBatch();
@@ -2170,7 +2244,7 @@ class Instagram implements ExperimentsInterface
         return [
             "rollout_hash" => self::getStringBetween($response, '"rollout_hash":"', '"'),
             "device_id" => self::getStringBetween($response, '"device_id":"', '"'),
-            "public_key" => self::getStringBetween($response, '"public_key":"', '"')
+            "public_key" => self::getStringBetween($response, '"public_key":"', '"'),
         ];
     }
 }

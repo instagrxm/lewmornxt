@@ -3153,3 +3153,60 @@ nav {
 .inputfile-session + label * {
 	pointer-events: none;
 }
+/**
+* iOS mod styles
+*/
+.box-list-item.onprogress:after {
+  visibility: visible;
+  opacity: 1;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+.darkside .box-list-item:after {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+.box-list-item:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  visibility: hidden;
+  width: 100%;
+  height: 100%;
+  content: "";
+  opacity: 0;
+  background-color: rgba(255, 255, 255, 0.75);
+  background-image: url(../img/round-loading.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  -webkit-transition: all ease 0.2s;
+  -moz-transition: all ease 0.2s;
+  transition: all ease 0.2s;
+}
+.device-type-section {
+  display: inline-block;
+}
+.device-type {
+  border: 1px solid #e6e6e6;
+  border-radius: 5px;
+  color: #9b9b9b;
+  background: transparent;
+  padding: 5px 10px 4px 10px;
+  font-size: 12px;
+  text-align: center;
+  display: table-cell;
+  font-weight: normal;
+  line-height: 12px;
+  min-width: 50px;
+}
+.darkside .device-type {
+  border: 1px solid #171717;
+}
+.device-type-description {
+  cursor: pointer;
+}
+.mr-3 {
+  margin-right: 3px;
+}
