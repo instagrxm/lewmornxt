@@ -1,0 +1,24 @@
+<?php
+namespace Plugins\MassVoting;
+
+// Disable direct access
+if (!defined('APP_VERSION'))
+    die("Yo, what's up?");
+
+/**
+ * Logs model
+ *
+ * @version 1.5
+ * @author Nextpost.tech (https://nextpost.tech)
+ *
+ */
+class LogsModel extends \DataList
+{
+	/**
+	 * Initialize
+	 */
+	public function __construct()
+	{
+		$this->setQuery(\DB::table(TABLE_PREFIX."hypervote_log"));
+	}
+}
