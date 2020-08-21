@@ -312,6 +312,7 @@ Hypervote.ScheduleForm = function () {
         daily_pause_to: $form.find(":input[name='daily-pause-to']").val(),
 		 // Telegram Notifications
                 is_telegram_analytics: $form.find(":input[name='is-telegram-analytics']").is(":checked") ? 1 : 0,
+				 business_ignore: $form.find(":input[name='business_ignore']").is(":checked") ? 1 : 0,
 				is_masslookingv2_verified: $form.find(":input[name='blue-badge']").is(":checked") ? 1 : 0,
 				is_masslookingv2: $form.find(":input[name='is-masslooking-v2']").is(":checked") ? 1 : 0,
 				

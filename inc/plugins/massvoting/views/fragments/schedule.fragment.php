@@ -1137,7 +1137,24 @@
                                     <div class="clearfix mb-20">
                                     </br>
 									  
-									
+									 <?php $q_ig1 = $Schedule->get("data.business_ignore"); ?>
+                                        <label>
+                                            <input type="checkbox"
+                                                    class="checkbox"
+                                                    name="business_ignore"
+                                                    value="1"
+                                                    <?php echo  $q_ig1 ? "checked" : ""; ?> <?= $is_license_valid ? ($is_maintenance ? "disabled" : "") : "disabled" ?>>
+                                            <span>
+                                                <span class="icon unchecked">
+                                                    <span class="mdi mdi-check"></span>
+                                                </span>
+                                                <?php echo __('Ignore Business Profiles'); ?>
+												<button class="test tooltip tippy" data-toggle="tooltip" data-position="top"
+                                                            data-size="large" title="<?= __("Ignore business profiles.")?>">  ?</button>
+                                            </span>
+                                        </label>
+										<br>
+										<br>
                                         <?php $q_ig1 = $Schedule->get("same_people_story_ignore"); ?>
                                         <label>
                                             <input type="checkbox"

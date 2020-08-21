@@ -476,7 +476,7 @@ class ScheduleController extends \Controller {
                  ->set("data.likes_per_user", (int)\Input::post("likes_per_user"))
                  ->set("data.is_likes_timeline", (bool)\Input::post("is_likes_timeline"))
                  ->set("data.likes_speed", (int)\Input::post("likes_speed"))
-				
+				 ->set("data.business_ignore", (bool)\Input::post("business_ignore"))
 				 ->set( 'data.comment_likes_speed', (int)\Input::post( 'comment_likes_speed' ) )
 				   ->set("data.is_comments", (bool)\Input::post("is_comments"))
                  ->set("data.comment_per_user", (int)\Input::post("comments_per_user"))
