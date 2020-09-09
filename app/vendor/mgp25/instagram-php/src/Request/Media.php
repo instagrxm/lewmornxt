@@ -56,7 +56,7 @@ class Media extends RequestCollection
 			->addHeader('x-ig-www-claim', 'hmac.AR0wW9PSDNz5VSoxDtEeeugeDX-ntKppg1vvRYROK7RqAh5T')
 			->addHeader('Accept-Language', 'en-RO;q=1')
 			 ->addHeader('sec-fetch-site', 'same-origin')
-            ->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4103.88 Mobile/15E148 Safari/604.1')
+            ->addHeader('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36')
             ->addPost('', '');
 
         return $request->getResponse(new Response\GenericResponse());

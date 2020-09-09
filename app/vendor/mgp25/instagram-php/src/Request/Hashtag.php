@@ -288,7 +288,7 @@ class Hashtag extends RequestCollection
         return $request = $this->ig->request("graphql/query/")
             ->setVersion(5)
             ->setSignedPost(false)
-            ->addParam('query_hash', 'bd33792e9f52a56ae8fa0985521d141d')
+            ->addParam('query_hash', '9b498c08113f1e09617a1703c22b2f32')
             ->addParam('variables', json_encode([
                 "tag_name" => $hashtag,
                 "first" => $next_page,

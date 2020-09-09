@@ -252,7 +252,7 @@ class Location extends RequestCollection
         return $request = $this->ig->request("graphql/query/")
             ->setVersion(5)
             ->setSignedPost(false)
-            ->addParam('query_hash', '1b84447a4d8b6d6d0426fefb34514485')
+            ->addParam('query_hash', '36bd0f2bf5911908de389b8ceaa3be6d')
             ->addParam('variables', json_encode([
                 "id" => $locationId,
                 "first" => $next_page,

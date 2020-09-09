@@ -67,6 +67,7 @@ class People extends RequestCollection
 	 
 	  public function likeCommentWeb(
         $commentId,
+		$postcode = null,
         	$rollout_hash = 'f9e28d162740')
     {
         if ($commentId == null) {
@@ -81,11 +82,22 @@ class People extends RequestCollection
             ->setAddDefaultHeaders(false)
             ->setSignedPost(false)
             ->addHeader('X-CSRFToken', $this->ig->client->getToken())
-            ->addHeader('Referer', 'https://www.instagram.com/')
+            ->addHeader('Referer', 'https://www.instagram.com/' . $postcode . '/')
             ->addHeader('X-Requested-With', 'XMLHttpRequest')
+			 ->addHeader('X-IG-Connection-Type', 'WiFi')
+			 ->addHeader('X-IG-Connection-Speed',	'1432kbps')
+			 ->addHeader('Accept', '*/*')
+			  ->addHeader('Host', 'i.instagram.com')
             ->addHeader('X-Instagram-AJAX', $rollout_hash)
-            ->addHeader('X-IG-App-ID', '936619743392459')
-             ->addHeader('User-Agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36')
+             ->addHeader('X-IG-App-ID', '1217981644879628')
+			->addHeader('sec-fetch-mode', 'cors')
+			->addHeader('sec-fetch-dest', 'empty')
+			->addHeader('origin', 'https://www.instagram.com')
+			->addHeader('accept-encoding', 'gzip, deflate, br')
+			->addHeader('x-ig-www-claim', 'hmac.AR0wW9PSDNz5VSoxDtEeeugeDX-ntKppg1vvRYROK7RqAh5T')
+			->addHeader('Accept-Language', 'en-RO;q=1')
+			 ->addHeader('sec-fetch-site', 'same-origin')
+            ->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4103.88 Mobile/15E148 Safari/604.1')
             ->addPost('', '');
 
         return $request->getResponse(new Response\GenericResponse());
@@ -347,12 +359,14 @@ class People extends RequestCollection
         $mediaId,
         $postcode,
         $commentText,
+		$replied_comment = null,
         $rollout_hash = 'f9e28d162740')
     {
         if ($mediaId == null) {
             throw new \InvalidArgumentException('Empty $mediaId sent to commentWeb() function.');
         }
-
+        $s = hash_hmac('sha256', $commentText, 'secret', true);
+       $hmac = base64_encode($s);
         if ($commentText == null) {
             throw new \InvalidArgumentException('Empty $commentText sent to commentWeb() function.');
         }
@@ -377,11 +391,13 @@ class People extends RequestCollection
 			->addHeader('sec-fetch-dest', 'empty')
 			->addHeader('origin', 'https://www.instagram.com')
 			->addHeader('accept-encoding', 'gzip, deflate, br')
-			->addHeader('x-ig-www-claim', 'hmac.AR0wW9PSDNz5VSoxDtEeeugeDX-ntKppg1vvRYROK7RqAh5T')
+			->addHeader('x-ig-www-claim', $hmac)
 			->addHeader('Accept-Language', 'en-RO;q=1')
 			 ->addHeader('sec-fetch-site', 'same-origin')
-            ->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4103.88 Mobile/15E148 Safari/604.1')
+            ->addHeader('User-Agent', 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148')
+				 ->addHeader('replied_to_comment_id', $replied_comment)
             ->addPost('comment_text', $commentText);
+			
 
         return $request->getResponse(new Response\CommentResponse());
     }
@@ -1263,7 +1279,8 @@ class People extends RequestCollection
         if ($rollout_hash == null || !is_string($rollout_hash)) {
             throw new \InvalidArgumentException('Empty or incorrect $rollout_hash sent to followWeb() function.');
         }
-        
+        $s = hash_hmac('sha256', $commentText, 'secret', true);
+       $hmac = base64_encode($s);
         $request = $this->ig->request("https://www.instagram.com/web/friendships/{$userId}/follow/")
             ->setAddDefaultHeaders(false)
             ->setSignedPost(false)
@@ -1275,16 +1292,16 @@ class People extends RequestCollection
 			 ->addHeader('X-IG-Connection-Speed',	'1432kbps')
 			 ->addHeader('Accept', '*/*')
 			  ->addHeader('Host', 'i.instagram.com')
-            ->addHeader('X-Instagram-AJAX', 'f9e28d162740')
+            ->addHeader('X-Instagram-AJAX', '197d0b77dbdb')
             ->addHeader('X-IG-App-ID', '936619743392459')
            	->addHeader('sec-fetch-mode', 'cors')
 			->addHeader('sec-fetch-dest', 'empty')
 			
 			->addHeader('accept-encoding', 'gzip, deflate, br')
-			->addHeader('x-ig-www-claim', 'hmac.AR0wW9PSDNz5VSoxDtEeeugeDX-ntKppg1vvRYROK7RqAh5T')
+			->addHeader('x-ig-www-claim', 'hmac.' . $hmac . '')
 			->addHeader('Accept-Language', 'en-RO;q=1')
 			 ->addHeader('sec-fetch-site', 'same-origin')
-            ->addHeader('User-Agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/83.0.4103.88 Mobile/15E148 Safari/604.1')
+            ->addHeader('User-Agent', 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148')
             ->addPost('', '');
 
         return $request->getResponse(new Response\FriendshipResponse());
